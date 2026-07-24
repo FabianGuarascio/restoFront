@@ -23,7 +23,11 @@
       {{ editingId() ? 'Guardar' : 'Agregar' }}
     </button>
     @if (editingId()) {
-      <button type="button" (click)="cancelar()" class="border rounded px-4 py-1.5 hover:bg-slate-50">
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="border rounded px-4 py-1.5 hover:bg-slate-50"
+      >
         Cancelar
       </button>
     }
@@ -40,7 +44,9 @@
         </div>
         <div class="flex gap-2 text-sm">
           <button (click)="editar(categoria)" class="text-blue-600 hover:underline">Editar</button>
-          <button (click)="eliminar(categoria)" class="text-red-600 hover:underline">Eliminar</button>
+          <button (click)="eliminar(categoria)" class="text-red-600 hover:underline">
+            Eliminar
+          </button>
         </div>
       </li>
     } @empty {

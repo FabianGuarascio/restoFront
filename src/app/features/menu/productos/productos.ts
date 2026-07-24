@@ -12,12 +12,18 @@ interface ProductoForm {
   disponible: boolean;
 }
 
-const FORM_VACIO: ProductoForm = { nombre: '', descripcion: '', precio: null, categoriaId: null, disponible: true };
+const FORM_VACIO: ProductoForm = {
+  nombre: '',
+  descripcion: '',
+  precio: null,
+  categoriaId: null,
+  disponible: true,
+};
 
 @Component({
   selector: 'app-productos',
   imports: [FormsModule],
-  templateUrl: './productos.html'
+  templateUrl: './productos.html',
 })
 export class Productos implements OnInit {
   private readonly productoService = inject(ProductoService);
@@ -37,7 +43,7 @@ export class Productos implements OnInit {
   cargar(): void {
     this.productoService.getAll().subscribe({
       next: (data) => this.productos.set(data),
-      error: () => this.error.set('No se pudieron cargar los productos.')
+      error: () => this.error.set('No se pudieron cargar los productos.'),
     });
   }
 
@@ -52,7 +58,7 @@ export class Productos implements OnInit {
       descripcion: this.form.descripcion.trim() || null,
       precio: this.form.precio,
       categoriaId: this.form.categoriaId,
-      disponible: this.form.disponible
+      disponible: this.form.disponible,
     };
 
     const id = this.editingId();
@@ -76,7 +82,7 @@ export class Productos implements OnInit {
       descripcion: producto.descripcion ?? '',
       precio: producto.precio,
       categoriaId: producto.categoriaId,
-      disponible: producto.disponible
+      disponible: producto.disponible,
     };
   }
 
@@ -93,7 +99,7 @@ export class Productos implements OnInit {
 
     this.productoService.delete(producto.id).subscribe({
       next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar el producto.')
+      error: () => this.error.set('No se pudo eliminar el producto.'),
     });
   }
 }

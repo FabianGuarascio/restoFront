@@ -5,6 +5,6 @@ import { Productos } from '../productos/productos';
 @Component({
   selector: 'app-menu-page',
   imports: [Categorias, Productos],
-  templateUrl: './menu-page.html'
+  templateUrl: './menu-page.html',
 })
 export class MenuPage {}

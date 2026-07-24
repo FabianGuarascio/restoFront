@@ -29,7 +29,12 @@
       class="border rounded px-3 py-1.5 w-28"
       required
     />
-    <select [(ngModel)]="form.categoriaId" name="categoriaId" class="border rounded px-3 py-1.5" required>
+    <select
+      [(ngModel)]="form.categoriaId"
+      name="categoriaId"
+      class="border rounded px-3 py-1.5"
+      required
+    >
       <option [value]="null" disabled>Categoría</option>
       @for (categoria of categorias(); track categoria.id) {
         <option [value]="categoria.id">{{ categoria.nombre }}</option>
@@ -43,7 +48,11 @@
       {{ editingId() ? 'Guardar' : 'Agregar' }}
     </button>
     @if (editingId()) {
-      <button type="button" (click)="cancelar()" class="border rounded px-4 py-1.5 hover:bg-slate-50">
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="border rounded px-4 py-1.5 hover:bg-slate-50"
+      >
         Cancelar
       </button>
     }
@@ -56,14 +65,20 @@
           <p class="font-medium">
             {{ producto.nombre }}
             @if (!producto.disponible) {
-              <span class="text-xs text-red-600 border border-red-300 rounded px-1.5 py-0.5 ml-2">No disponible</span>
+              <span class="text-xs text-red-600 border border-red-300 rounded px-1.5 py-0.5 ml-2"
+                >No disponible</span
+              >
             }
           </p>
-          <p class="text-sm text-slate-500">{{ producto.categoriaNombre }} · ${{ producto.precio }}</p>
+          <p class="text-sm text-slate-500">
+            {{ producto.categoriaNombre }} · ${{ producto.precio }}
+          </p>
         </div>
         <div class="flex gap-2 text-sm">
           <button (click)="editar(producto)" class="text-blue-600 hover:underline">Editar</button>
-          <button (click)="eliminar(producto)" class="text-red-600 hover:underline">Eliminar</button>
+          <button (click)="eliminar(producto)" class="text-red-600 hover:underline">
+            Eliminar
+          </button>
         </div>
       </li>
     } @empty {

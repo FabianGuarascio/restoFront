@@ -3,7 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { PedidoService } from '../../../core/services/pedido.service';
 import { MesaService } from '../../../core/services/mesa.service';
 import { ProductoService } from '../../../core/services/producto.service';
-import { Pedido, PedidoEstado, PedidoResumen, PEDIDO_TRANSICIONES_VALIDAS } from '../../../core/models/pedido.model';
+import {
+  Pedido,
+  PedidoEstado,
+  PedidoResumen,
+  PEDIDO_TRANSICIONES_VALIDAS,
+} from '../../../core/models/pedido.model';
 import { Mesa } from '../../../core/models/mesa.model';
 import { Producto } from '../../../core/models/producto.model';
 
@@ -19,7 +24,7 @@ const ESTADOS_MODIFICABLES: PedidoEstado[] = ['Pendiente', 'EnPreparacion'];
 @Component({
   selector: 'app-pedidos-page',
   imports: [FormsModule],
-  templateUrl: './pedidos-page.html'
+  templateUrl: './pedidos-page.html',
 })
 export class PedidosPage implements OnInit {
   private readonly pedidoService = inject(PedidoService);
@@ -49,24 +54,28 @@ export class PedidosPage implements OnInit {
   ngOnInit(): void {
     this.cargarPedidos();
     this.cargarMesasLibres();
-    this.productoService.getAll().subscribe((data) => this.productosDisponibles.set(data.filter((p) => p.disponible)));
+    this.productoService
+      .getAll()
+      .subscribe((data) => this.productosDisponibles.set(data.filter((p) => p.disponible)));
   }
 
   cargarPedidos(): void {
     this.pedidoService.getAll().subscribe({
       next: (data) => this.pedidos.set(data),
-      error: () => this.error.set('No se pudieron cargar los pedidos.')
+      error: () => this.error.set('No se pudieron cargar los pedidos.'),
     });
   }
 
   cargarMesasLibres(): void {
-    this.mesaService.getAll().subscribe((data) => this.mesasLibres.set(data.filter((m) => m.estado === 'Libre')));
+    this.mesaService
+      .getAll()
+      .subscribe((data) => this.mesasLibres.set(data.filter((m) => m.estado === 'Libre')));
   }
 
   seleccionar(resumen: PedidoResumen): void {
     this.pedidoService.getById(resumen.id).subscribe({
       next: (pedido) => this.pedidoSeleccionado.set(pedido),
-      error: () => this.error.set('No se pudo abrir el pedido.')
+      error: () => this.error.set('No se pudo abrir el pedido.'),
     });
   }
 
@@ -83,7 +92,7 @@ export class PedidosPage implements OnInit {
         this.cargarMesasLibres();
         this.pedidoSeleccionado.set(pedido);
       },
-      error: () => this.error.set('No se pudo crear el pedido.')
+      error: () => this.error.set('No se pudo crear el pedido.'),
     });
   }
 
@@ -97,7 +106,7 @@ export class PedidosPage implements OnInit {
       .agregarItem(pedido.id, {
         productoId: this.itemForm.productoId,
         cantidad: this.itemForm.cantidad,
-        notas: this.itemForm.notas.trim() || null
+        notas: this.itemForm.notas.trim() || null,
       })
       .subscribe({
         next: (actualizado) => {
@@ -105,7 +114,7 @@ export class PedidosPage implements OnInit {
           this.itemForm = { ...ITEM_FORM_VACIO };
           this.cargarPedidos();
         },
-        error: () => this.error.set('No se pudo agregar el ítem.')
+        error: () => this.error.set('No se pudo agregar el ítem.'),
       });
   }
 
@@ -120,7 +129,7 @@ export class PedidosPage implements OnInit {
         this.pedidoSeleccionado.set(actualizado);
         this.cargarPedidos();
       },
-      error: () => this.error.set('No se pudo quitar el ítem.')
+      error: () => this.error.set('No se pudo quitar el ítem.'),
     });
   }
 
@@ -136,7 +145,7 @@ export class PedidosPage implements OnInit {
         this.cargarPedidos();
         this.cargarMesasLibres();
       },
-      error: () => this.error.set('No se pudo cambiar el estado del pedido.')
+      error: () => this.error.set('No se pudo cambiar el estado del pedido.'),
     });
   }
 }

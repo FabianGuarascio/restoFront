@@ -1,7 +1,10 @@
 <div class="max-w-5xl mx-auto">
   <div class="flex items-center justify-between mb-4">
     <h1 class="text-xl font-semibold">Mesas</h1>
-    <button (click)="mostrarForm.set(!mostrarForm())" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">
+    <button
+      (click)="mostrarForm.set(!mostrarForm())"
+      class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700"
+    >
       {{ mostrarForm() ? 'Cancelar' : '+ Nueva mesa' }}
     </button>
   </div>
@@ -14,13 +17,29 @@
     <form (ngSubmit)="crear()" class="bg-white rounded-lg shadow p-4 mb-6 flex gap-2 items-end">
       <div>
         <label class="block text-xs text-slate-500">Número</label>
-        <input [(ngModel)]="form.numero" name="numero" type="number" min="1" class="border rounded px-3 py-1.5 w-24" required />
+        <input
+          [(ngModel)]="form.numero"
+          name="numero"
+          type="number"
+          min="1"
+          class="border rounded px-3 py-1.5 w-24"
+          required
+        />
       </div>
       <div>
         <label class="block text-xs text-slate-500">Capacidad</label>
-        <input [(ngModel)]="form.capacidad" name="capacidad" type="number" min="1" class="border rounded px-3 py-1.5 w-24" required />
+        <input
+          [(ngModel)]="form.capacidad"
+          name="capacidad"
+          type="number"
+          min="1"
+          class="border rounded px-3 py-1.5 w-24"
+          required
+        />
       </div>
-      <button type="submit" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">Crear</button>
+      <button type="submit" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">
+        Crear
+      </button>
     </form>
   }
 

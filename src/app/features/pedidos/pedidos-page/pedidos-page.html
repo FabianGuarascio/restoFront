@@ -7,23 +7,39 @@
     <div class="lg:col-span-1">
       <div class="flex items-center justify-between mb-3">
         <h1 class="text-xl font-semibold">Pedidos</h1>
-        <button (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())" class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700">
+        <button
+          (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())"
+          class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+        >
           {{ mostrarNuevoPedido() ? 'Cancelar' : '+ Nuevo' }}
         </button>
       </div>
 
       @if (mostrarNuevoPedido()) {
-        <form (ngSubmit)="crearPedido()" class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end">
+        <form
+          (ngSubmit)="crearPedido()"
+          class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
+        >
           <div class="flex-1">
             <label class="block text-xs text-slate-500">Mesa libre</label>
-            <select [(ngModel)]="mesaParaNuevoPedido" name="mesa" class="border rounded px-2 py-1.5 w-full" required>
+            <select
+              [(ngModel)]="mesaParaNuevoPedido"
+              name="mesa"
+              class="border rounded px-2 py-1.5 w-full"
+              required
+            >
               <option [ngValue]="null" disabled>Elegir mesa</option>
               @for (mesa of mesasLibres(); track mesa.id) {
                 <option [ngValue]="mesa.id">Mesa {{ mesa.numero }} ({{ mesa.capacidad }})</option>
               }
             </select>
           </div>
-          <button type="submit" class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700">Abrir</button>
+          <button
+            type="submit"
+            class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+          >
+            Abrir
+          </button>
         </form>
       }
 
@@ -68,7 +84,12 @@
                 <div class="flex items-center gap-3">
                   <p>${{ item.subtotal }}</p>
                   @if (puedeModificarItems()) {
-                    <button (click)="quitarItem(item.id)" class="text-red-600 hover:underline text-sm">Quitar</button>
+                    <button
+                      (click)="quitarItem(item.id)"
+                      class="text-red-600 hover:underline text-sm"
+                    >
+                      Quitar
+                    </button>
                   }
                 </div>
               </li>
@@ -78,32 +99,61 @@
           </ul>
 
           @if (puedeModificarItems()) {
-            <form (ngSubmit)="agregarItem()" class="flex flex-wrap gap-2 items-end mb-5 border-t pt-4">
+            <form
+              (ngSubmit)="agregarItem()"
+              class="flex flex-wrap gap-2 items-end mb-5 border-t pt-4"
+            >
               <div class="flex-1 min-w-[160px]">
                 <label class="block text-xs text-slate-500">Producto</label>
-                <select [(ngModel)]="itemForm.productoId" name="productoId" class="border rounded px-2 py-1.5 w-full" required>
+                <select
+                  [(ngModel)]="itemForm.productoId"
+                  name="productoId"
+                  class="border rounded px-2 py-1.5 w-full"
+                  required
+                >
                   <option [ngValue]="null" disabled>Elegir producto</option>
                   @for (producto of productosDisponibles(); track producto.id) {
-                    <option [ngValue]="producto.id">{{ producto.nombre }} · ${{ producto.precio }}</option>
+                    <option [ngValue]="producto.id">
+                      {{ producto.nombre }} · ${{ producto.precio }}
+                    </option>
                   }
                 </select>
               </div>
               <div>
                 <label class="block text-xs text-slate-500">Cantidad</label>
-                <input [(ngModel)]="itemForm.cantidad" name="cantidad" type="number" min="1" class="border rounded px-2 py-1.5 w-20" required />
+                <input
+                  [(ngModel)]="itemForm.cantidad"
+                  name="cantidad"
+                  type="number"
+                  min="1"
+                  class="border rounded px-2 py-1.5 w-20"
+                  required
+                />
               </div>
               <div class="flex-1 min-w-[140px]">
                 <label class="block text-xs text-slate-500">Notas</label>
-                <input [(ngModel)]="itemForm.notas" name="notas" class="border rounded px-2 py-1.5 w-full" />
+                <input
+                  [(ngModel)]="itemForm.notas"
+                  name="notas"
+                  class="border rounded px-2 py-1.5 w-full"
+                />
               </div>
-              <button type="submit" class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700">Agregar</button>
+              <button
+                type="submit"
+                class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+              >
+                Agregar
+              </button>
             </form>
           }
 
           @if (transicionesDisponibles().length > 0) {
             <div class="flex gap-2 border-t pt-4">
               @for (estado of transicionesDisponibles(); track estado) {
-                <button (click)="cambiarEstado(estado)" class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50">
+                <button
+                  (click)="cambiarEstado(estado)"
+                  class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50"
+                >
                   Pasar a {{ estado }}
                 </button>
               }

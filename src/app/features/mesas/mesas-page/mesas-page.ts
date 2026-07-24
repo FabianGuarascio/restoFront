@@ -13,7 +13,7 @@ const FORM_VACIO: MesaForm = { numero: null, capacidad: null };
 @Component({
   selector: 'app-mesas-page',
   imports: [FormsModule],
-  templateUrl: './mesas-page.html'
+  templateUrl: './mesas-page.html',
 })
 export class MesasPage implements OnInit {
   private readonly mesaService = inject(MesaService);
@@ -30,7 +30,7 @@ export class MesasPage implements OnInit {
   cargar(): void {
     this.mesaService.getAll().subscribe({
       next: (data) => this.mesas.set(data),
-      error: () => this.error.set('No se pudieron cargar las mesas.')
+      error: () => this.error.set('No se pudieron cargar las mesas.'),
     });
   }
 
@@ -39,28 +39,34 @@ export class MesasPage implements OnInit {
       return;
     }
 
-    this.mesaService.create({ numero: this.form.numero, capacidad: this.form.capacidad }).subscribe({
-      next: () => {
-        this.form = { ...FORM_VACIO };
-        this.mostrarForm.set(false);
-        this.cargar();
-      },
-      error: () => this.error.set('No se pudo crear la mesa (¿número repetido?).')
-    });
+    this.mesaService
+      .create({ numero: this.form.numero, capacidad: this.form.capacidad })
+      .subscribe({
+        next: () => {
+          this.form = { ...FORM_VACIO };
+          this.mostrarForm.set(false);
+          this.cargar();
+        },
+        error: () => this.error.set('No se pudo crear la mesa (¿número repetido?).'),
+      });
   }
 
   reservar(mesa: Mesa): void {
-    this.mesaService.update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Reservada' }).subscribe({
-      next: () => this.cargar(),
-      error: () => this.error.set('No se pudo reservar la mesa.')
-    });
+    this.mesaService
+      .update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Reservada' })
+      .subscribe({
+        next: () => this.cargar(),
+        error: () => this.error.set('No se pudo reservar la mesa.'),
+      });
   }
 
   liberar(mesa: Mesa): void {
-    this.mesaService.update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Libre' }).subscribe({
-      next: () => this.cargar(),
-      error: () => this.error.set('No se pudo liberar la mesa.')
-    });
+    this.mesaService
+      .update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Libre' })
+      .subscribe({
+        next: () => this.cargar(),
+        error: () => this.error.set('No se pudo liberar la mesa.'),
+      });
   }
 
   eliminar(mesa: Mesa): void {
@@ -70,7 +76,7 @@ export class MesasPage implements OnInit {
 
     this.mesaService.delete(mesa.id).subscribe({
       next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar la mesa.')
+      error: () => this.error.set('No se pudo eliminar la mesa.'),
     });
   }
 

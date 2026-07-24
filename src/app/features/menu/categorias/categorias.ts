@@ -13,7 +13,7 @@ const FORM_VACIO: CategoriaForm = { nombre: '', descripcion: '' };
 @Component({
   selector: 'app-categorias',
   imports: [FormsModule],
-  templateUrl: './categorias.html'
+  templateUrl: './categorias.html',
 })
 export class Categorias implements OnInit {
   private readonly categoriaService = inject(CategoriaService);
@@ -36,7 +36,10 @@ export class Categorias implements OnInit {
       return;
     }
 
-    const dto = { nombre: this.form.nombre.trim(), descripcion: this.form.descripcion.trim() || null };
+    const dto = {
+      nombre: this.form.nombre.trim(),
+      descripcion: this.form.descripcion.trim() || null,
+    };
     const id = this.editingId();
     const onSuccess = () => {
       this.cancelar();
@@ -68,7 +71,7 @@ export class Categorias implements OnInit {
 
     this.categoriaService.delete(categoria.id).subscribe({
       next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar (¿tiene productos asociados?).')
+      error: () => this.error.set('No se pudo eliminar (¿tiene productos asociados?).'),
     });
   }
 }
