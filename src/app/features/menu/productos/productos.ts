@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductoService } from '../../core/services/producto.service';
-import { CategoriaService } from '../../core/services/categoria.service';
-import { Producto } from '../../core/models/producto.model';
+import { ProductoService } from '../../../core/services/producto.service';
+import { CategoriaService } from '../../../core/services/categoria.service';
+import { Producto } from '../../../core/models/producto.model';
 
 interface ProductoForm {
   nombre: string;

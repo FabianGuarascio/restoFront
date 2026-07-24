@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CategoriaService } from '../../core/services/categoria.service';
-import { Categoria } from '../../core/models/categoria.model';
+import { CategoriaService } from '../../../core/services/categoria.service';
+import { Categoria } from '../../../core/models/categoria.model';
 
 interface CategoriaForm {
   nombre: string;
