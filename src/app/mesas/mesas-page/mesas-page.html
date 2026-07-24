@@ -1,0 +1,50 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold">Mesas</h1>
+    <button (click)="mostrarForm.set(!mostrarForm())" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">
+      {{ mostrarForm() ? 'Cancelar' : '+ Nueva mesa' }}
+    </button>
+  </div>
+
+  @if (error()) {
+    <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
+  }
+
+  @if (mostrarForm()) {
+    <form (ngSubmit)="crear()" class="bg-white rounded-lg shadow p-4 mb-6 flex gap-2 items-end">
+      <div>
+        <label class="block text-xs text-slate-500">Número</label>
+        <input [(ngModel)]="form.numero" name="numero" type="number" min="1" class="border rounded px-3 py-1.5 w-24" required />
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500">Capacidad</label>
+        <input [(ngModel)]="form.capacidad" name="capacidad" type="number" min="1" class="border rounded px-3 py-1.5 w-24" required />
+      </div>
+      <button type="submit" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">Crear</button>
+    </form>
+  }
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    @for (mesa of mesas(); track mesa.id) {
+      <div class="border-2 rounded-lg p-4 flex flex-col gap-2" [class]="claseEstado(mesa)">
+        <p class="text-2xl font-bold">Mesa {{ mesa.numero }}</p>
+        <p class="text-sm">Capacidad: {{ mesa.capacidad }}</p>
+        <p class="text-sm font-semibold">{{ mesa.estado }}</p>
+
+        <div class="flex gap-2 text-sm mt-2">
+          @if (mesa.estado === 'Libre') {
+            <button (click)="reservar(mesa)" class="underline">Reservar</button>
+          }
+          @if (mesa.estado === 'Reservada') {
+            <button (click)="liberar(mesa)" class="underline">Liberar</button>
+          }
+          @if (mesa.estado === 'Libre') {
+            <button (click)="eliminar(mesa)" class="underline">Eliminar</button>
+          }
+        </div>
+      </div>
+    } @empty {
+      <p class="text-slate-500 text-sm col-span-full">No hay mesas cargadas todavía.</p>
+    }
+  </div>
+</div>
