@@ -21,8 +21,11 @@
           class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
         >
           <div class="flex-1">
-            <label class="block text-xs text-slate-500">Mesa libre</label>
+            <label for="pedido-mesa" class="block text-xs text-slate-500"
+              >Mesa libre</label
+            >
             <select
+              id="pedido-mesa"
               [(ngModel)]="mesaParaNuevoPedido"
               name="mesa"
               class="border rounded px-2 py-1.5 w-full"
@@ -30,7 +33,9 @@
             >
               <option [ngValue]="null" disabled>Elegir mesa</option>
               @for (mesa of mesasLibres(); track mesa.id) {
-                <option [ngValue]="mesa.id">Mesa {{ mesa.numero }} ({{ mesa.capacidad }})</option>
+                <option [ngValue]="mesa.id">
+                  Mesa {{ mesa.numero }} ({{ mesa.capacidad }})
+                </option>
               }
             </select>
           </div>
@@ -51,12 +56,16 @@
               class="w-full text-left px-4 py-3 hover:bg-slate-50"
               [class.bg-slate-100]="pedidoSeleccionado()?.id === resumen.id"
             >
-              <p class="font-medium">Mesa {{ resumen.mesaNumero }} · {{ resumen.estado }}</p>
+              <p class="font-medium">
+                Mesa {{ resumen.mesaNumero }} · {{ resumen.estado }}
+              </p>
               <p class="text-sm text-slate-500">${{ resumen.total }}</p>
             </button>
           </li>
         } @empty {
-          <li class="px-4 py-3 text-sm text-slate-500">No hay pedidos todavía.</li>
+          <li class="px-4 py-3 text-sm text-slate-500">
+            No hay pedidos todavía.
+          </li>
         }
       </ul>
     </div>
@@ -66,7 +75,9 @@
         <div class="bg-white rounded-lg shadow p-5">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h2 class="text-lg font-semibold">Mesa {{ pedido.mesaNumero }}</h2>
+              <h2 class="text-lg font-semibold">
+                Mesa {{ pedido.mesaNumero }}
+              </h2>
               <p class="text-sm text-slate-500">Estado: {{ pedido.estado }}</p>
             </div>
             <p class="text-2xl font-bold">${{ pedido.total }}</p>
@@ -76,7 +87,9 @@
             @for (item of pedido.items; track item.id) {
               <li class="flex items-center justify-between py-2">
                 <div>
-                  <p class="font-medium">{{ item.cantidad }}x {{ item.productoNombre }}</p>
+                  <p class="font-medium">
+                    {{ item.cantidad }}x {{ item.productoNombre }}
+                  </p>
                   @if (item.notas) {
                     <p class="text-sm text-slate-500">{{ item.notas }}</p>
                   }
@@ -94,7 +107,9 @@
                 </div>
               </li>
             } @empty {
-              <li class="py-3 text-slate-500 text-sm">Todavía no se agregaron productos.</li>
+              <li class="py-3 text-slate-500 text-sm">
+                Todavía no se agregaron productos.
+              </li>
             }
           </ul>
 
@@ -104,8 +119,11 @@
               class="flex flex-wrap gap-2 items-end mb-5 border-t pt-4"
             >
               <div class="flex-1 min-w-[160px]">
-                <label class="block text-xs text-slate-500">Producto</label>
+                <label for="item-producto" class="block text-xs text-slate-500"
+                  >Producto</label
+                >
                 <select
+                  id="item-producto"
                   [(ngModel)]="itemForm.productoId"
                   name="productoId"
                   class="border rounded px-2 py-1.5 w-full"
@@ -120,8 +138,11 @@
                 </select>
               </div>
               <div>
-                <label class="block text-xs text-slate-500">Cantidad</label>
+                <label for="item-cantidad" class="block text-xs text-slate-500"
+                  >Cantidad</label
+                >
                 <input
+                  id="item-cantidad"
                   [(ngModel)]="itemForm.cantidad"
                   name="cantidad"
                   type="number"
@@ -131,8 +152,11 @@
                 />
               </div>
               <div class="flex-1 min-w-[140px]">
-                <label class="block text-xs text-slate-500">Notas</label>
+                <label for="item-notas" class="block text-xs text-slate-500"
+                  >Notas</label
+                >
                 <input
+                  id="item-notas"
                   [(ngModel)]="itemForm.notas"
                   name="notas"
                   class="border rounded px-2 py-1.5 w-full"

@@ -47,13 +47,18 @@ export class MesasPage implements OnInit {
           this.mostrarForm.set(false);
           this.cargar();
         },
-        error: () => this.error.set('No se pudo crear la mesa (¿número repetido?).'),
+        error: () =>
+          this.error.set('No se pudo crear la mesa (¿número repetido?).'),
       });
   }
 
   reservar(mesa: Mesa): void {
     this.mesaService
-      .update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Reservada' })
+      .update(mesa.id, {
+        numero: mesa.numero,
+        capacidad: mesa.capacidad,
+        estado: 'Reservada',
+      })
       .subscribe({
         next: () => this.cargar(),
         error: () => this.error.set('No se pudo reservar la mesa.'),
@@ -62,7 +67,11 @@ export class MesasPage implements OnInit {
 
   liberar(mesa: Mesa): void {
     this.mesaService
-      .update(mesa.id, { numero: mesa.numero, capacidad: mesa.capacidad, estado: 'Libre' })
+      .update(mesa.id, {
+        numero: mesa.numero,
+        capacidad: mesa.capacidad,
+        estado: 'Libre',
+      })
       .subscribe({
         next: () => this.cargar(),
         error: () => this.error.set('No se pudo liberar la mesa.'),

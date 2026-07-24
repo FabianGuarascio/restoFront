@@ -14,10 +14,16 @@
   }
 
   @if (mostrarForm()) {
-    <form (ngSubmit)="crear()" class="bg-white rounded-lg shadow p-4 mb-6 flex gap-2 items-end">
+    <form
+      (ngSubmit)="crear()"
+      class="bg-white rounded-lg shadow p-4 mb-6 flex gap-2 items-end"
+    >
       <div>
-        <label class="block text-xs text-slate-500">Número</label>
+        <label for="mesa-numero" class="block text-xs text-slate-500"
+          >Número</label
+        >
         <input
+          id="mesa-numero"
           [(ngModel)]="form.numero"
           name="numero"
           type="number"
@@ -27,8 +33,11 @@
         />
       </div>
       <div>
-        <label class="block text-xs text-slate-500">Capacidad</label>
+        <label for="mesa-capacidad" class="block text-xs text-slate-500"
+          >Capacidad</label
+        >
         <input
+          id="mesa-capacidad"
           [(ngModel)]="form.capacidad"
           name="capacidad"
           type="number"
@@ -37,7 +46,10 @@
           required
         />
       </div>
-      <button type="submit" class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700">
+      <button
+        type="submit"
+        class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700"
+      >
         Crear
       </button>
     </form>
@@ -45,7 +57,10 @@
 
   <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
     @for (mesa of mesas(); track mesa.id) {
-      <div class="border-2 rounded-lg p-4 flex flex-col gap-2" [class]="claseEstado(mesa)">
+      <div
+        class="border-2 rounded-lg p-4 flex flex-col gap-2"
+        [class]="claseEstado(mesa)"
+      >
         <p class="text-2xl font-bold">Mesa {{ mesa.numero }}</p>
         <p class="text-sm">Capacidad: {{ mesa.capacidad }}</p>
         <p class="text-sm font-semibold">{{ mesa.estado }}</p>
@@ -63,7 +78,9 @@
         </div>
       </div>
     } @empty {
-      <p class="text-slate-500 text-sm col-span-full">No hay mesas cargadas todavía.</p>
+      <p class="text-slate-500 text-sm col-span-full">
+        No hay mesas cargadas todavía.
+      </p>
     }
   </div>
 </div>

@@ -1,0 +1,11 @@
+<app-list-item
+  (editar)="editar.emit(categoria())"
+  (eliminar)="eliminar.emit(categoria())"
+>
+  <div>
+    <p class="font-medium">{{ categoria().nombre }}</p>
+    @if (categoria().descripcion) {
+      <p class="text-sm text-slate-500">{{ categoria().descripcion }}</p>
+    }
+  </div>
+</app-list-item>

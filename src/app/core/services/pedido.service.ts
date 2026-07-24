@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Pedido, PedidoEstado, PedidoItemCreate, PedidoResumen } from '../models/pedido.model';
+import {
+  Pedido,
+  PedidoEstado,
+  PedidoItemCreate,
+  PedidoResumen,
+} from '../models/pedido.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -25,10 +30,14 @@ export class PedidoService {
   }
 
   quitarItem(pedidoId: number, itemId: number) {
-    return this.http.delete<Pedido>(`${this.baseUrl}/${pedidoId}/items/${itemId}`);
+    return this.http.delete<Pedido>(
+      `${this.baseUrl}/${pedidoId}/items/${itemId}`,
+    );
   }
 
   cambiarEstado(pedidoId: number, nuevoEstado: PedidoEstado) {
-    return this.http.patch<Pedido>(`${this.baseUrl}/${pedidoId}/estado`, { nuevoEstado });
+    return this.http.patch<Pedido>(`${this.baseUrl}/${pedidoId}/estado`, {
+      nuevoEstado,
+    });
   }
 }

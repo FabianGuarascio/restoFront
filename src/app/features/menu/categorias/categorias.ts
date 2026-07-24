@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService } from '@core/services/categoria.service';
 import { Categoria } from '@core/models/categoria.model';
+import { CategoriaItem } from './categoria-item/categoria-item';
 
 interface CategoriaForm {
   nombre: string;
@@ -12,7 +13,7 @@ const FORM_VACIO: CategoriaForm = { nombre: '', descripcion: '' };
 
 @Component({
   selector: 'app-categorias',
-  imports: [FormsModule],
+  imports: [FormsModule, CategoriaItem],
   templateUrl: './categorias.html',
 })
 export class Categorias implements OnInit {
@@ -48,15 +49,22 @@ export class Categorias implements OnInit {
     const onError = () => this.error.set('No se pudo guardar la categoría.');
 
     if (id) {
-      this.categoriaService.update(id, dto).subscribe({ next: onSuccess, error: onError });
+      this.categoriaService
+        .update(id, dto)
+        .subscribe({ next: onSuccess, error: onError });
     } else {
-      this.categoriaService.create(dto).subscribe({ next: onSuccess, error: onError });
+      this.categoriaService
+        .create(dto)
+        .subscribe({ next: onSuccess, error: onError });
     }
   }
 
   editar(categoria: Categoria): void {
     this.editingId.set(categoria.id);
-    this.form = { nombre: categoria.nombre, descripcion: categoria.descripcion ?? '' };
+    this.form = {
+      nombre: categoria.nombre,
+      descripcion: categoria.descripcion ?? '',
+    };
   }
 
   cancelar(): void {
@@ -71,7 +79,8 @@ export class Categorias implements OnInit {
 
     this.categoriaService.delete(categoria.id).subscribe({
       next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar (¿tiene productos asociados?).'),
+      error: () =>
+        this.error.set('No se pudo eliminar (¿tiene productos asociados?).'),
     });
   }
 }

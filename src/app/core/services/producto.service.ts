@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Producto, ProductoCreate, ProductoUpdate } from '../models/producto.model';
+import {
+  Producto,
+  ProductoCreate,
+  ProductoUpdate,
+} from '../models/producto.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
@@ -9,7 +13,9 @@ export class ProductoService {
   private readonly baseUrl = `${environment.apiUrl}/productos`;
 
   getAll(categoriaId?: number) {
-    const url = categoriaId ? `${this.baseUrl}?categoriaId=${categoriaId}` : this.baseUrl;
+    const url = categoriaId
+      ? `${this.baseUrl}?categoriaId=${categoriaId}`
+      : this.baseUrl;
     return this.http.get<Producto[]>(url);
   }
 

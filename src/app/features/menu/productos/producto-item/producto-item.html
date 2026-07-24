@@ -1,0 +1,19 @@
+<app-list-item
+  (editar)="editar.emit(producto())"
+  (eliminar)="eliminar.emit(producto())"
+>
+  <div>
+    <p class="font-medium">
+      {{ producto().nombre }}
+      @if (!producto().disponible) {
+        <span
+          class="text-xs text-red-600 border border-red-300 rounded px-1.5 py-0.5 ml-2"
+          >No disponible</span
+        >
+      }
+    </p>
+    <p class="text-sm text-slate-500">
+      {{ producto().categoriaNombre }} · ${{ producto().precio }}
+    </p>
+  </div>
+</app-list-item>

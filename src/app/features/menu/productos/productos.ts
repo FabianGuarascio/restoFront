@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductoService } from '@core/services/producto.service';
 import { CategoriaService } from '@core/services/categoria.service';
 import { Producto } from '@core/models/producto.model';
+import { ProductoItem } from './producto-item/producto-item';
 
 interface ProductoForm {
   nombre: string;
@@ -22,7 +23,7 @@ const FORM_VACIO: ProductoForm = {
 
 @Component({
   selector: 'app-productos',
-  imports: [FormsModule],
+  imports: [FormsModule, ProductoItem],
   templateUrl: './productos.html',
 })
 export class Productos implements OnInit {
@@ -48,7 +49,11 @@ export class Productos implements OnInit {
   }
 
   guardar(): void {
-    if (!this.form.nombre.trim() || this.form.precio === null || this.form.categoriaId === null) {
+    if (
+      !this.form.nombre.trim() ||
+      this.form.precio === null ||
+      this.form.categoriaId === null
+    ) {
       this.error.set('Completá nombre, precio y categoría.');
       return;
     }
@@ -69,9 +74,13 @@ export class Productos implements OnInit {
     const onError = () => this.error.set('No se pudo guardar el producto.');
 
     if (id) {
-      this.productoService.update(id, dto).subscribe({ next: onSuccess, error: onError });
+      this.productoService
+        .update(id, dto)
+        .subscribe({ next: onSuccess, error: onError });
     } else {
-      this.productoService.create(dto).subscribe({ next: onSuccess, error: onError });
+      this.productoService
+        .create(dto)
+        .subscribe({ next: onSuccess, error: onError });
     }
   }
 

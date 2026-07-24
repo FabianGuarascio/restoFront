@@ -56,7 +56,9 @@ export class PedidosPage implements OnInit {
     this.cargarMesasLibres();
     this.productoService
       .getAll()
-      .subscribe((data) => this.productosDisponibles.set(data.filter((p) => p.disponible)));
+      .subscribe((data) =>
+        this.productosDisponibles.set(data.filter((p) => p.disponible)),
+      );
   }
 
   cargarPedidos(): void {
@@ -69,7 +71,9 @@ export class PedidosPage implements OnInit {
   cargarMesasLibres(): void {
     this.mesaService
       .getAll()
-      .subscribe((data) => this.mesasLibres.set(data.filter((m) => m.estado === 'Libre')));
+      .subscribe((data) =>
+        this.mesasLibres.set(data.filter((m) => m.estado === 'Libre')),
+      );
   }
 
   seleccionar(resumen: PedidoResumen): void {
@@ -98,7 +102,11 @@ export class PedidosPage implements OnInit {
 
   agregarItem(): void {
     const pedido = this.pedidoSeleccionado();
-    if (!pedido || this.itemForm.productoId === null || this.itemForm.cantidad < 1) {
+    if (
+      !pedido ||
+      this.itemForm.productoId === null ||
+      this.itemForm.cantidad < 1
+    ) {
       return;
     }
 

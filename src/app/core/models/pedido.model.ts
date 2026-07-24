@@ -1,5 +1,10 @@
 export type PedidoEstado =
-  'Pendiente' | 'EnPreparacion' | 'Listo' | 'Entregado' | 'Pagado' | 'Cancelado';
+  | 'Pendiente'
+  | 'EnPreparacion'
+  | 'Listo'
+  | 'Entregado'
+  | 'Pagado'
+  | 'Cancelado';
 
 export interface PedidoItem {
   id: number;
@@ -36,11 +41,12 @@ export interface PedidoItemCreate {
   notas?: string | null;
 }
 
-export const PEDIDO_TRANSICIONES_VALIDAS: Record<PedidoEstado, PedidoEstado[]> = {
-  Pendiente: ['EnPreparacion', 'Cancelado'],
-  EnPreparacion: ['Listo', 'Cancelado'],
-  Listo: ['Entregado', 'Cancelado'],
-  Entregado: ['Pagado'],
-  Pagado: [],
-  Cancelado: [],
-};
+export const PEDIDO_TRANSICIONES_VALIDAS: Record<PedidoEstado, PedidoEstado[]> =
+  {
+    Pendiente: ['EnPreparacion', 'Cancelado'],
+    EnPreparacion: ['Listo', 'Cancelado'],
+    Listo: ['Entregado', 'Cancelado'],
+    Entregado: ['Pagado'],
+    Pagado: [],
+    Cancelado: [],
+  };

@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Categoria, CategoriaCreate, CategoriaUpdate } from '../models/categoria.model';
+import {
+  Categoria,
+  CategoriaCreate,
+  CategoriaUpdate,
+} from '../models/categoria.model';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriaService {
