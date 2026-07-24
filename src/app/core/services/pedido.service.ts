@@ -9,7 +9,7 @@ import {
 } from '../models/pedido.model';
 
 @Injectable({ providedIn: 'root' })
-export class PedidoService {
+export class PedidoAPI {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/pedidos`;
 

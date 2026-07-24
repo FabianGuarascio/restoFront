@@ -1,16 +1,13 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PedidoService } from '@core/services/pedido.service';
-import { MesaService } from '@core/services/mesa.service';
-import { ProductoService } from '@core/services/producto.service';
+import { PedidosStore } from '@core/state/pedidos.store';
+import { MesasStore } from '@core/state/mesas.store';
+import { ProductosStore } from '@core/state/productos.store';
 import {
-  Pedido,
   PedidoEstado,
   PedidoResumen,
   PEDIDO_TRANSICIONES_VALIDAS,
 } from '../../../core/models/pedido.model';
-import { Mesa } from '@core/models/mesa.model';
-import { Producto } from '@core/models/producto.model';
 
 interface ItemForm {
   productoId: number | null;
@@ -27,14 +24,14 @@ const ESTADOS_MODIFICABLES: PedidoEstado[] = ['Pendiente', 'EnPreparacion'];
   templateUrl: './pedidos-page.html',
 })
 export class PedidosPage implements OnInit {
-  private readonly pedidoService = inject(PedidoService);
-  private readonly mesaService = inject(MesaService);
-  private readonly productoService = inject(ProductoService);
+  private readonly pedidosStore = inject(PedidosStore);
+  private readonly mesasStore = inject(MesasStore);
+  private readonly productosStore = inject(ProductosStore);
 
-  readonly pedidos = signal<PedidoResumen[]>([]);
-  readonly mesasLibres = signal<Mesa[]>([]);
-  readonly productosDisponibles = signal<Producto[]>([]);
-  readonly pedidoSeleccionado = signal<Pedido | null>(null);
+  readonly pedidos = this.pedidosStore.resumenes;
+  readonly mesasLibres = this.mesasStore.libres;
+  readonly productosDisponibles = this.productosStore.disponibles;
+  readonly pedidoSeleccionado = this.pedidosStore.seleccionado;
   readonly mostrarNuevoPedido = signal(false);
   readonly error = signal<string | null>(null);
 
@@ -52,55 +49,34 @@ export class PedidosPage implements OnInit {
   });
 
   ngOnInit(): void {
-    this.cargarPedidos();
-    this.cargarMesasLibres();
-    this.productoService
-      .getAll()
-      .subscribe((data) =>
-        this.productosDisponibles.set(data.filter((p) => p.disponible)),
-      );
+    this.pedidosStore.load();
+    this.mesasStore.load();
+    this.productosStore.load();
   }
 
-  cargarPedidos(): void {
-    this.pedidoService.getAll().subscribe({
-      next: (data) => this.pedidos.set(data),
-      error: () => this.error.set('No se pudieron cargar los pedidos.'),
-    });
+  async seleccionar(resumen: PedidoResumen): Promise<void> {
+    try {
+      await this.pedidosStore.seleccionar(resumen.id);
+    } catch {
+      this.error.set('No se pudo abrir el pedido.');
+    }
   }
 
-  cargarMesasLibres(): void {
-    this.mesaService
-      .getAll()
-      .subscribe((data) =>
-        this.mesasLibres.set(data.filter((m) => m.estado === 'Libre')),
-      );
-  }
-
-  seleccionar(resumen: PedidoResumen): void {
-    this.pedidoService.getById(resumen.id).subscribe({
-      next: (pedido) => this.pedidoSeleccionado.set(pedido),
-      error: () => this.error.set('No se pudo abrir el pedido.'),
-    });
-  }
-
-  crearPedido(): void {
+  async crearPedido(): Promise<void> {
     if (this.mesaParaNuevoPedido === null) {
       return;
     }
 
-    this.pedidoService.crear(this.mesaParaNuevoPedido).subscribe({
-      next: (pedido) => {
-        this.mostrarNuevoPedido.set(false);
-        this.mesaParaNuevoPedido = null;
-        this.cargarPedidos();
-        this.cargarMesasLibres();
-        this.pedidoSeleccionado.set(pedido);
-      },
-      error: () => this.error.set('No se pudo crear el pedido.'),
-    });
+    try {
+      await this.pedidosStore.crear(this.mesaParaNuevoPedido);
+      this.mostrarNuevoPedido.set(false);
+      this.mesaParaNuevoPedido = null;
+    } catch {
+      this.error.set('No se pudo crear el pedido.');
+    }
   }
 
-  agregarItem(): void {
+  async agregarItem(): Promise<void> {
     const pedido = this.pedidoSeleccionado();
     if (
       !pedido ||
@@ -110,50 +86,41 @@ export class PedidosPage implements OnInit {
       return;
     }
 
-    this.pedidoService
-      .agregarItem(pedido.id, {
+    try {
+      await this.pedidosStore.agregarItem(pedido.id, {
         productoId: this.itemForm.productoId,
         cantidad: this.itemForm.cantidad,
         notas: this.itemForm.notas.trim() || null,
-      })
-      .subscribe({
-        next: (actualizado) => {
-          this.pedidoSeleccionado.set(actualizado);
-          this.itemForm = { ...ITEM_FORM_VACIO };
-          this.cargarPedidos();
-        },
-        error: () => this.error.set('No se pudo agregar el ítem.'),
       });
+      this.itemForm = { ...ITEM_FORM_VACIO };
+    } catch {
+      this.error.set('No se pudo agregar el ítem.');
+    }
   }
 
-  quitarItem(itemId: number): void {
+  async quitarItem(itemId: number): Promise<void> {
     const pedido = this.pedidoSeleccionado();
     if (!pedido) {
       return;
     }
 
-    this.pedidoService.quitarItem(pedido.id, itemId).subscribe({
-      next: (actualizado) => {
-        this.pedidoSeleccionado.set(actualizado);
-        this.cargarPedidos();
-      },
-      error: () => this.error.set('No se pudo quitar el ítem.'),
-    });
+    try {
+      await this.pedidosStore.quitarItem(pedido.id, itemId);
+    } catch {
+      this.error.set('No se pudo quitar el ítem.');
+    }
   }
 
-  cambiarEstado(nuevoEstado: PedidoEstado): void {
+  async cambiarEstado(nuevoEstado: PedidoEstado): Promise<void> {
     const pedido = this.pedidoSeleccionado();
     if (!pedido) {
       return;
     }
 
-    this.pedidoService.cambiarEstado(pedido.id, nuevoEstado).subscribe({
-      next: (actualizado) => {
-        this.pedidoSeleccionado.set(actualizado);
-        this.cargarPedidos();
-        this.cargarMesasLibres();
-      },
-      error: () => this.error.set('No se pudo cambiar el estado del pedido.'),
-    });
+    try {
+      await this.pedidosStore.cambiarEstado(pedido.id, nuevoEstado);
+    } catch {
+      this.error.set('No se pudo cambiar el estado del pedido.');
+    }
   }
 }

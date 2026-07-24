@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CategoriaService } from '@core/services/categoria.service';
+import { CategoriasStore } from '@core/state/categorias.store';
 import { Categoria } from '@core/models/categoria.model';
 import { CategoriaItem } from './categoria-item/categoria-item';
 
@@ -17,22 +17,18 @@ const FORM_VACIO: CategoriaForm = { nombre: '', descripcion: '' };
   templateUrl: './categorias.html',
 })
 export class Categorias implements OnInit {
-  private readonly categoriaService = inject(CategoriaService);
+  private readonly categoriasStore = inject(CategoriasStore);
 
-  readonly categorias = this.categoriaService.categorias;
+  readonly categorias = this.categoriasStore.items;
   readonly editingId = signal<number | null>(null);
   readonly error = signal<string | null>(null);
   form: CategoriaForm = { ...FORM_VACIO };
 
   ngOnInit(): void {
-    this.cargar();
+    this.categoriasStore.load();
   }
 
-  cargar(): void {
-    this.categoriaService.cargar();
-  }
-
-  guardar(): void {
+  async guardar(): Promise<void> {
     if (!this.form.nombre.trim()) {
       return;
     }
@@ -42,20 +38,16 @@ export class Categorias implements OnInit {
       descripcion: this.form.descripcion.trim() || null,
     };
     const id = this.editingId();
-    const onSuccess = () => {
-      this.cancelar();
-      this.cargar();
-    };
-    const onError = () => this.error.set('No se pudo guardar la categoría.');
 
-    if (id) {
-      this.categoriaService
-        .update(id, dto)
-        .subscribe({ next: onSuccess, error: onError });
-    } else {
-      this.categoriaService
-        .create(dto)
-        .subscribe({ next: onSuccess, error: onError });
+    try {
+      if (id) {
+        await this.categoriasStore.actualizar(id, dto);
+      } else {
+        await this.categoriasStore.crear(dto);
+      }
+      this.cancelar();
+    } catch {
+      this.error.set('No se pudo guardar la categoría.');
     }
   }
 
@@ -72,15 +64,15 @@ export class Categorias implements OnInit {
     this.form = { ...FORM_VACIO };
   }
 
-  eliminar(categoria: Categoria): void {
+  async eliminar(categoria: Categoria): Promise<void> {
     if (!confirm(`¿Eliminar la categoría "${categoria.nombre}"?`)) {
       return;
     }
 
-    this.categoriaService.delete(categoria.id).subscribe({
-      next: () => this.cargar(),
-      error: () =>
-        this.error.set('No se pudo eliminar (¿tiene productos asociados?).'),
-    });
+    try {
+      await this.categoriasStore.eliminar(categoria.id);
+    } catch {
+      this.error.set('No se pudo eliminar (¿tiene productos asociados?).');
+    }
   }
 }

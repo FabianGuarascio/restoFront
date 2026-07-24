@@ -4,7 +4,7 @@ import { environment } from '@environments/environment';
 import { Mesa, MesaCreate, MesaUpdate } from '../models/mesa.model';
 
 @Injectable({ providedIn: 'root' })
-export class MesaService {
+export class MesaAPI {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/mesas`;
 

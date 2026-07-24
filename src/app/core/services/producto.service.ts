@@ -8,7 +8,7 @@ import {
 } from '../models/producto.model';
 
 @Injectable({ providedIn: 'root' })
-export class ProductoService {
+export class ProductoAPI {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/productos`;
 

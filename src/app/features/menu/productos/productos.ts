@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductoService } from '@core/services/producto.service';
-import { CategoriaService } from '@core/services/categoria.service';
+import { ProductosStore } from '@core/state/productos.store';
+import { CategoriasStore } from '@core/state/categorias.store';
 import { Producto } from '@core/models/producto.model';
 import { ProductoItem } from './producto-item/producto-item';
 
@@ -27,28 +27,21 @@ const FORM_VACIO: ProductoForm = {
   templateUrl: './productos.html',
 })
 export class Productos implements OnInit {
-  private readonly productoService = inject(ProductoService);
-  private readonly categoriaService = inject(CategoriaService);
+  private readonly store = inject(ProductosStore);
+  private readonly categoriasStore = inject(CategoriasStore);
 
-  readonly productos = signal<Producto[]>([]);
-  readonly categorias = this.categoriaService.categorias;
+  readonly productos = this.store.items;
+  readonly categorias = this.categoriasStore.items;
   readonly editingId = signal<number | null>(null);
   readonly error = signal<string | null>(null);
   form: ProductoForm = { ...FORM_VACIO };
 
   ngOnInit(): void {
-    this.categoriaService.cargar();
-    this.cargar();
+    this.categoriasStore.load();
+    this.store.load();
   }
 
-  cargar(): void {
-    this.productoService.getAll().subscribe({
-      next: (data) => this.productos.set(data),
-      error: () => this.error.set('No se pudieron cargar los productos.'),
-    });
-  }
-
-  guardar(): void {
+  async guardar(): Promise<void> {
     if (
       !this.form.nombre.trim() ||
       this.form.precio === null ||
@@ -67,20 +60,16 @@ export class Productos implements OnInit {
     };
 
     const id = this.editingId();
-    const onSuccess = () => {
-      this.cancelar();
-      this.cargar();
-    };
-    const onError = () => this.error.set('No se pudo guardar el producto.');
 
-    if (id) {
-      this.productoService
-        .update(id, dto)
-        .subscribe({ next: onSuccess, error: onError });
-    } else {
-      this.productoService
-        .create(dto)
-        .subscribe({ next: onSuccess, error: onError });
+    try {
+      if (id) {
+        await this.store.actualizar(id, dto);
+      } else {
+        await this.store.crear(dto);
+      }
+      this.cancelar();
+    } catch {
+      this.error.set('No se pudo guardar el producto.');
     }
   }
 
@@ -101,14 +90,15 @@ export class Productos implements OnInit {
     this.form = { ...FORM_VACIO };
   }
 
-  eliminar(producto: Producto): void {
+  async eliminar(producto: Producto): Promise<void> {
     if (!confirm(`¿Eliminar el producto "${producto.nombre}"?`)) {
       return;
     }
 
-    this.productoService.delete(producto.id).subscribe({
-      next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar el producto.'),
-    });
+    try {
+      await this.store.eliminar(producto.id);
+    } catch {
+      this.error.set('No se pudo eliminar el producto.');
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MesaService } from '@core/services/mesa.service';
+import { MesasStore } from '@core/state/mesas.store';
 import { Mesa } from '@core/models/mesa.model';
 
 interface MesaForm {
@@ -16,77 +16,68 @@ const FORM_VACIO: MesaForm = { numero: null, capacidad: null };
   templateUrl: './mesas-page.html',
 })
 export class MesasPage implements OnInit {
-  private readonly mesaService = inject(MesaService);
+  private readonly mesasStore = inject(MesasStore);
 
-  readonly mesas = signal<Mesa[]>([]);
+  readonly mesas = this.mesasStore.items;
   readonly error = signal<string | null>(null);
   readonly mostrarForm = signal(false);
   form: MesaForm = { ...FORM_VACIO };
 
   ngOnInit(): void {
-    this.cargar();
+    this.mesasStore.load();
   }
 
-  cargar(): void {
-    this.mesaService.getAll().subscribe({
-      next: (data) => this.mesas.set(data),
-      error: () => this.error.set('No se pudieron cargar las mesas.'),
-    });
-  }
-
-  crear(): void {
+  async crear(): Promise<void> {
     if (this.form.numero === null || this.form.capacidad === null) {
       return;
     }
 
-    this.mesaService
-      .create({ numero: this.form.numero, capacidad: this.form.capacidad })
-      .subscribe({
-        next: () => {
-          this.form = { ...FORM_VACIO };
-          this.mostrarForm.set(false);
-          this.cargar();
-        },
-        error: () =>
-          this.error.set('No se pudo crear la mesa (¿número repetido?).'),
+    try {
+      await this.mesasStore.crear({
+        numero: this.form.numero,
+        capacidad: this.form.capacidad,
       });
+      this.form = { ...FORM_VACIO };
+      this.mostrarForm.set(false);
+    } catch {
+      this.error.set('No se pudo crear la mesa (¿número repetido?).');
+    }
   }
 
-  reservar(mesa: Mesa): void {
-    this.mesaService
-      .update(mesa.id, {
+  async reservar(mesa: Mesa): Promise<void> {
+    try {
+      await this.mesasStore.actualizar(mesa.id, {
         numero: mesa.numero,
         capacidad: mesa.capacidad,
         estado: 'Reservada',
-      })
-      .subscribe({
-        next: () => this.cargar(),
-        error: () => this.error.set('No se pudo reservar la mesa.'),
       });
+    } catch {
+      this.error.set('No se pudo reservar la mesa.');
+    }
   }
 
-  liberar(mesa: Mesa): void {
-    this.mesaService
-      .update(mesa.id, {
+  async liberar(mesa: Mesa): Promise<void> {
+    try {
+      await this.mesasStore.actualizar(mesa.id, {
         numero: mesa.numero,
         capacidad: mesa.capacidad,
         estado: 'Libre',
-      })
-      .subscribe({
-        next: () => this.cargar(),
-        error: () => this.error.set('No se pudo liberar la mesa.'),
       });
+    } catch {
+      this.error.set('No se pudo liberar la mesa.');
+    }
   }
 
-  eliminar(mesa: Mesa): void {
+  async eliminar(mesa: Mesa): Promise<void> {
     if (!confirm(`¿Eliminar la mesa ${mesa.numero}?`)) {
       return;
     }
 
-    this.mesaService.delete(mesa.id).subscribe({
-      next: () => this.cargar(),
-      error: () => this.error.set('No se pudo eliminar la mesa.'),
-    });
+    try {
+      await this.mesasStore.eliminar(mesa.id);
+    } catch {
+      this.error.set('No se pudo eliminar la mesa.');
+    }
   }
 
   claseEstado(mesa: Mesa): string {
