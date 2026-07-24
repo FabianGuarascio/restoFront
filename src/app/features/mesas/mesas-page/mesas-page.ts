@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MesaService } from '../../../core/services/mesa.service';
-import { Mesa } from '../../../core/models/mesa.model';
+import { MesaService } from '@core/services/mesa.service';
+import { Mesa } from '@core/models/mesa.model';
 
 interface MesaForm {
   numero: number | null;

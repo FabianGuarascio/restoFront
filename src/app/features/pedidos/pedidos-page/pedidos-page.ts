@@ -1,16 +1,16 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PedidoService } from '../../../core/services/pedido.service';
-import { MesaService } from '../../../core/services/mesa.service';
-import { ProductoService } from '../../../core/services/producto.service';
+import { PedidoService } from '@core/services/pedido.service';
+import { MesaService } from '@core/services/mesa.service';
+import { ProductoService } from '@core/services/producto.service';
 import {
   Pedido,
   PedidoEstado,
   PedidoResumen,
   PEDIDO_TRANSICIONES_VALIDAS,
 } from '../../../core/models/pedido.model';
-import { Mesa } from '../../../core/models/mesa.model';
-import { Producto } from '../../../core/models/producto.model';
+import { Mesa } from '@core/models/mesa.model';
+import { Producto } from '@core/models/producto.model';
 
 interface ItemForm {
   productoId: number | null;
