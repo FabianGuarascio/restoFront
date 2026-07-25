@@ -1,0 +1,48 @@
+<app-modal [abierto]="true" titulo="Nueva mesa" (cerrar)="cerrar.emit()">
+  <div class="flex flex-col gap-3">
+    <div>
+      <input
+        [formField]="mesaForm.numero"
+        type="number"
+        placeholder="Número"
+        class="border rounded px-3 py-1.5 w-full"
+      />
+      @if (mesaForm.numero().touched() && mesaForm.numero().invalid()) {
+        <p class="text-red-600 text-xs mt-1">
+          {{ mesaForm.numero().errors()[0].message }}
+        </p>
+      }
+    </div>
+    <div>
+      <input
+        [formField]="mesaForm.capacidad"
+        type="number"
+        placeholder="Capacidad"
+        class="border rounded px-3 py-1.5 w-full"
+      />
+      @if (mesaForm.capacidad().touched() && mesaForm.capacidad().invalid()) {
+        <p class="text-red-600 text-xs mt-1">
+          {{ mesaForm.capacidad().errors()[0].message }}
+        </p>
+      }
+    </div>
+  </div>
+
+  <button
+    footer
+    type="button"
+    (click)="cerrar.emit()"
+    class="border rounded px-4 py-1.5 hover:bg-slate-50"
+  >
+    Cancelar
+  </button>
+  <button
+    footer
+    type="button"
+    (click)="guardar()"
+    [disabled]="mesaForm().submitting()"
+    class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700 disabled:opacity-50"
+  >
+    Agregar
+  </button>
+</app-modal>
