@@ -3,8 +3,10 @@
     <p class="text-sm text-slate-700">
       @if (tipo() === 'categoria') {
         ¿Eliminar la categoría "{{ it.nombre }}"?
-      } @else {
+      } @else if (tipo() === 'producto') {
         ¿Eliminar el producto "{{ it.nombre }}"?
+      } @else {
+        ¿Eliminar la mesa {{ it.nombre }}?
       }
     </p>
   }

@@ -1,0 +1,46 @@
+<div
+  class="border-2 rounded-lg p-4 flex flex-col gap-2"
+  [class]="mesa().estado | claseEstadoMesa"
+>
+  <p class="text-2xl font-bold">Mesa {{ mesa().numero }}</p>
+  <p class="text-sm">Capacidad: {{ mesa().capacidad }}</p>
+  <p class="text-sm font-semibold">{{ mesa().estado }}</p>
+
+  @if (error()) {
+    <p class="text-red-600 text-xs">{{ error() }}</p>
+  }
+
+  <div class="flex gap-2 text-sm mt-2 min-h-5">
+    @if (mesa().estado === 'Libre') {
+      <button
+        type="button"
+        (click)="accion('reservar')"
+        class="cursor-pointer underline"
+      >
+        Reservar
+      </button>
+      <button
+        type="button"
+        (click)="accion('eliminar')"
+        class="cursor-pointer underline"
+      >
+        Eliminar
+      </button>
+    }
+    @if (mesa().estado === 'Reservada') {
+      <button
+        type="button"
+        (click)="accion('liberar')"
+        class="cursor-pointer underline"
+      >
+        Liberar
+      </button>
+    }
+  </div>
+</div>
+
+<app-modal-eliminar
+  tipo="mesa"
+  [item]="itemAEliminar()"
+  (cerrar)="confirmandoEliminar.set(false)"
+/>
