@@ -1,0 +1,33 @@
+<app-modal [abierto]="abierto()" (cerrar)="cerrar.emit()">
+  @if (item(); as it) {
+    <p class="text-sm text-slate-700">
+      @if (tipo() === 'categoria') {
+        ¿Eliminar la categoría "{{ it.nombre }}"?
+      } @else {
+        ¿Eliminar el producto "{{ it.nombre }}"?
+      }
+    </p>
+  }
+
+  @if (error()) {
+    <p class="text-red-600 text-sm mt-2">{{ error() }}</p>
+  }
+
+  <button
+    footer
+    type="button"
+    (click)="cerrar.emit()"
+    class="border rounded px-4 py-1.5 hover:bg-slate-50"
+  >
+    Cancelar
+  </button>
+  <button
+    footer
+    type="button"
+    (click)="confirmar()"
+    [disabled]="eliminando()"
+    class="bg-red-600 text-white rounded px-4 py-1.5 hover:bg-red-500 disabled:opacity-50"
+  >
+    Eliminar
+  </button>
+</app-modal>

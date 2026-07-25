@@ -7,7 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
-import { PedidoAPI } from '@core/services/pedido.service';
+import { PedidoAPI } from '@core/services/API/pedidoAPI';
 import {
   Pedido,
   PedidoEstado,

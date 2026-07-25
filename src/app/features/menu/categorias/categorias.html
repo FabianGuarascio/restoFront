@@ -1,40 +1,14 @@
 <div class="bg-white rounded-lg shadow p-5">
-  <h2 class="text-lg font-semibold mb-4">Categorías</h2>
-
-  @if (error()) {
-    <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
-  }
-
-  <form (ngSubmit)="guardar()" class="flex flex-wrap gap-2 mb-4">
-    <input
-      [(ngModel)]="form.nombre"
-      name="nombre"
-      placeholder="Nombre"
-      class="border rounded px-3 py-1.5 flex-1 min-w-[140px]"
-      required
-    />
-    <input
-      [(ngModel)]="form.descripcion"
-      name="descripcion"
-      placeholder="Descripción (opcional)"
-      class="border rounded px-3 py-1.5 flex-1 min-w-[180px]"
-    />
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-semibold">Categorías</h2>
     <button
-      type="submit"
+      type="button"
+      (click)="nueva()"
       class="bg-slate-900 text-white rounded px-4 py-1.5 hover:bg-slate-700"
     >
-      {{ editingId() ? 'Guardar' : 'Agregar' }}
+      Nueva categoría
     </button>
-    @if (editingId()) {
-      <button
-        type="button"
-        (click)="cancelar()"
-        class="border rounded px-4 py-1.5 hover:bg-slate-50"
-      >
-        Cancelar
-      </button>
-    }
-  </form>
+  </div>
 
   <ul class="divide-y">
     @for (categoria of categorias(); track categoria.id) {
@@ -50,3 +24,16 @@
     }
   </ul>
 </div>
+
+<app-modal-formulario
+  tipo="categoria"
+  [abierto]="modalCreacionAbierto()"
+  [item]="itemEditando()"
+  (cerrar)="modalCreacionAbierto.set(false)"
+/>
+
+<app-modal-eliminar
+  tipo="categoria"
+  [item]="itemAEliminar()"
+  (cerrar)="itemAEliminar.set(null)"
+/>

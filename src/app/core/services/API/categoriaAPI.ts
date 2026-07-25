@@ -1,22 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Mesa, MesaCreate, MesaUpdate } from '../models/mesa.model';
+import {
+  Categoria,
+  CategoriaCreate,
+  CategoriaUpdate,
+} from '../../models/categoria.model';
 
 @Injectable({ providedIn: 'root' })
-export class MesaAPI {
+export class CategoriaAPI {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/mesas`;
+  private readonly baseUrl = `${environment.apiUrl}/categorias`;
 
   getAll() {
-    return this.http.get<Mesa[]>(this.baseUrl);
+    return this.http.get<Categoria[]>(this.baseUrl);
   }
 
-  create(dto: MesaCreate) {
-    return this.http.post<Mesa>(this.baseUrl, dto);
+  create(dto: CategoriaCreate) {
+    return this.http.post<Categoria>(this.baseUrl, dto);
   }
 
-  update(id: number, dto: MesaUpdate) {
+  update(id: number, dto: CategoriaUpdate) {
     return this.http.put<void>(`${this.baseUrl}/${id}`, dto);
   }
 

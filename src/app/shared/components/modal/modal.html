@@ -1,0 +1,28 @@
+@if (abierto()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <button
+      type="button"
+      class="absolute inset-0 bg-black/50 cursor-default"
+      aria-label="Cerrar modal"
+      animate.enter="modal-backdrop-enter"
+      animate.leave="modal-backdrop-leave"
+      (click)="cerrar.emit()"
+    ></button>
+
+    <div
+      class="relative z-10 bg-white rounded-lg shadow max-w-md w-full p-5"
+      animate.enter="modal-panel-enter"
+      animate.leave="modal-panel-leave"
+    >
+      @if (titulo()) {
+        <h3 class="text-lg font-semibold mb-4">{{ titulo() }}</h3>
+      }
+
+      <ng-content></ng-content>
+
+      <div class="flex justify-end gap-2 mt-5">
+        <ng-content select="[footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+}

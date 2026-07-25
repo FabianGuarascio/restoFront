@@ -7,7 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
-import { MesaAPI } from '@core/services/mesa.service';
+import { MesaAPI } from '@core/services/API/mesaAPI';
 import {
   Mesa,
   MesaCreate,

@@ -6,7 +6,7 @@ import {
   PedidoEstado,
   PedidoItemCreate,
   PedidoResumen,
-} from '../models/pedido.model';
+} from '../../models/pedido.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoAPI {

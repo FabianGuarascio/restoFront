@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
-import { CategoriaAPI } from '@core/services/categoria.service';
+import { CategoriaAPI } from '@core/services/API/categoriaAPI';
 import {
   Categoria,
   CategoriaCreate,

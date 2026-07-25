@@ -7,7 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
-import { ProductoAPI } from '@core/services/producto.service';
+import { ProductoAPI } from '@core/services/API/productoAPI';
 import {
   Producto,
   ProductoCreate,

@@ -5,7 +5,7 @@ import {
   Producto,
   ProductoCreate,
   ProductoUpdate,
-} from '../models/producto.model';
+} from '../../models/producto.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductoAPI {
