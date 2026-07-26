@@ -25,6 +25,13 @@ Rutas: `/menu`, `/mesas`, `/pedidos`.
 
 La URL base de la API se configura por environment (`src/environments/`), no está hardcodeada en los services.
 
+## Deploy
+
+- Frontend: https://icy-grass-0220dfb10.7.azurestaticapps.net (Azure Static Web App `resto-front-guarascio`)
+- Backend: https://resto-api-guarascio.azurewebsites.net (Azure App Service, plan free — cold start tras inactividad)
+
+CI/CD vía GitHub Actions: push a `main` dispara build y deploy automático a la Static Web App.
+
 ## Comandos
 
 ```bash
