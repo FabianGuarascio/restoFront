@@ -9,20 +9,29 @@
     </button>
   </div>
 
-  <div
-    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-    cdkDropList
-    cdkDropListOrientation="mixed"
-    (cdkDropListDropped)="onDrop($event)"
-  >
-    @for (mesa of mesas(); track mesa.id) {
-      <app-mesa-item [mesa]="mesa" cdkDrag [attr.data-mesa-id]="mesa.id" />
-    } @empty {
-      <p class="text-slate-500 text-sm col-span-full">
-        No hay mesas cargadas todavía.
-      </p>
-    }
-  </div>
+  @if (cargando()) {
+    <app-loading-spinner />
+  } @else if (errorCarga()) {
+    <app-error-banner
+      [mensaje]="errorCarga()!"
+      (reintentar)="reintentarCarga()"
+    />
+  } @else {
+    <div
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+      cdkDropList
+      cdkDropListOrientation="mixed"
+      (cdkDropListDropped)="onDrop($event)"
+    >
+      @for (mesa of mesas(); track mesa.id) {
+        <app-mesa-item [mesa]="mesa" cdkDrag [attr.data-mesa-id]="mesa.id" />
+      } @empty {
+        <p class="text-slate-500 text-sm col-span-full">
+          No hay mesas cargadas todavía.
+        </p>
+      }
+    </div>
+  }
 </div>
 
 @if (modalCreacionAbierto()) {

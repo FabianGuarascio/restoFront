@@ -1,97 +1,106 @@
 <div class="max-w-6xl mx-auto">
-  @if (error()) {
-    <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
-  }
+  @if (cargando()) {
+    <app-loading-spinner />
+  } @else if (errorCarga()) {
+    <app-error-banner
+      [mensaje]="errorCarga()!"
+      (reintentar)="reintentarCarga()"
+    />
+  } @else {
+    @if (error()) {
+      <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
+    }
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-1">
-      <div class="flex items-center justify-between mb-3">
-        <h1 class="text-xl font-semibold">Pedidos</h1>
-        <button
-          (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())"
-          class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
-        >
-          {{ mostrarNuevoPedido() ? 'Cancelar' : '+ Nuevo' }}
-        </button>
-      </div>
-
-      @if (mostrarNuevoPedido()) {
-        <form
-          (ngSubmit)="crearPedido()"
-          class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
-        >
-          <div class="flex-1">
-            <label for="pedido-mesa" class="block text-xs text-slate-500"
-              >Mesa libre</label
-            >
-            <select
-              id="pedido-mesa"
-              [(ngModel)]="mesaParaNuevoPedido"
-              name="mesa"
-              class="border rounded px-2 py-1.5 w-full"
-              required
-            >
-              <option [ngValue]="null" disabled>Elegir mesa</option>
-              @for (mesa of mesasLibres(); track mesa.id) {
-                <option [ngValue]="mesa.id">
-                  Mesa {{ mesa.numero }} ({{ mesa.capacidad }})
-                </option>
-              }
-            </select>
-          </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1">
+        <div class="flex items-center justify-between mb-3">
+          <h1 class="text-xl font-semibold">Pedidos</h1>
           <button
-            type="submit"
+            (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())"
             class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
           >
-            Abrir
+            {{ mostrarNuevoPedido() ? 'Cancelar' : '+ Nuevo' }}
           </button>
-        </form>
-      }
+        </div>
 
-      <div class="bg-white rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
-        <label class="flex items-center gap-1.5 font-medium">
-          <input
-            type="checkbox"
-            [checked]="todosSeleccionados()"
-            [indeterminate]="algunoSeleccionado()"
-            (change)="toggleTodosLosEstados($any($event.target).checked)"
-          />
-          Todos los estados
-        </label>
-        @for (estado of todosLosEstados; track estado) {
-          <label class="flex items-center gap-1.5">
+        @if (mostrarNuevoPedido()) {
+          <form
+            (ngSubmit)="crearPedido()"
+            class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
+          >
+            <div class="flex-1">
+              <label for="pedido-mesa" class="block text-xs text-slate-500"
+                >Mesa libre</label
+              >
+              <select
+                id="pedido-mesa"
+                [(ngModel)]="mesaParaNuevoPedido"
+                name="mesa"
+                class="border rounded px-2 py-1.5 w-full"
+                required
+              >
+                <option [ngValue]="null" disabled>Elegir mesa</option>
+                @for (mesa of mesasLibres(); track mesa.id) {
+                  <option [ngValue]="mesa.id">
+                    Mesa {{ mesa.numero }} ({{ mesa.capacidad }})
+                  </option>
+                }
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+            >
+              Abrir
+            </button>
+          </form>
+        }
+
+        <div class="bg-white rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+          <label class="flex items-center gap-1.5 font-medium">
             <input
               type="checkbox"
-              [checked]="estadosFiltrados().has(estado)"
-              (change)="toggleEstado(estado, $any($event.target).checked)"
+              [checked]="todosSeleccionados()"
+              [indeterminate]="algunoSeleccionado()"
+              (change)="toggleTodosLosEstados($any($event.target).checked)"
             />
-            {{ estado }}
+            Todos los estados
           </label>
-        }
+          @for (estado of todosLosEstados; track estado) {
+            <label class="flex items-center gap-1.5">
+              <input
+                type="checkbox"
+                [checked]="estadosFiltrados().has(estado)"
+                (change)="toggleEstado(estado, $any($event.target).checked)"
+              />
+              {{ estado }}
+            </label>
+          }
+        </div>
+
+        <app-pedidos-tabla
+          titulo="En proceso"
+          [pedidos]="pedidosActivos()"
+          mensajeVacio="No hay pedidos todavía."
+        />
+
+        <app-pedidos-tabla
+          titulo="Finalizados"
+          [pedidos]="pedidosFinalizados()"
+          mensajeVacio="No hay pedidos finalizados."
+          class="mt-5"
+        />
       </div>
 
-      <app-pedidos-tabla
-        titulo="En proceso"
-        [pedidos]="pedidosActivos()"
-        mensajeVacio="No hay pedidos todavía."
-      />
-
-      <app-pedidos-tabla
-        titulo="Finalizados"
-        [pedidos]="pedidosFinalizados()"
-        mensajeVacio="No hay pedidos finalizados."
-        class="mt-5"
-      />
+      <div class="lg:col-span-2">
+        @if (pedidoSeleccionado(); as pedido) {
+          <app-pedido-detalle [pedido]="pedido" />
+        } @else {
+          <div class="bg-white rounded-lg shadow p-10 text-center text-slate-500">
+            Elegí un pedido de la lista o creá uno nuevo.
+          </div>
+        }
+      </div>
     </div>
-
-    <div class="lg:col-span-2">
-      @if (pedidoSeleccionado(); as pedido) {
-        <app-pedido-detalle [pedido]="pedido" />
-      } @else {
-        <div class="bg-white rounded-lg shadow p-10 text-center text-slate-500">
-          Elegí un pedido de la lista o creá uno nuevo.
-        </div>
-      }
-    </div>
-  </div>
+  }
 </div>
