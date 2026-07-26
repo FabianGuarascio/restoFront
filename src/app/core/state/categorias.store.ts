@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { CategoriaAPI } from '@core/services/API/categoriaAPI';
+import { conRetryPorColdStart } from '@core/services/http-retry.util';
 import {
   Categoria,
   CategoriaCreate,
@@ -32,7 +33,9 @@ export const CategoriasStore = signalStore(
       }
       patchState(store, { loading: true, error: null });
       try {
-        const items = await firstValueFrom(service.getAll());
+        const items = await firstValueFrom(
+          service.getAll().pipe(conRetryPorColdStart),
+        );
         patchState(store, { items, loaded: true, loading: false });
       } catch {
         patchState(store, {

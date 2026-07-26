@@ -8,6 +8,7 @@ import {
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { MesaAPI } from '@core/services/API/mesaAPI';
+import { conRetryPorColdStart } from '@core/services/http-retry.util';
 import {
   Mesa,
   MesaCreate,
@@ -42,7 +43,9 @@ export const MesasStore = signalStore(
       }
       patchState(store, { loading: true, error: null });
       try {
-        const items = await firstValueFrom(service.getAll());
+        const items = await firstValueFrom(
+          service.getAll().pipe(conRetryPorColdStart),
+        );
         patchState(store, { items, loaded: true, loading: false });
       } catch {
         patchState(store, {

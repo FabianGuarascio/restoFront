@@ -8,6 +8,7 @@ import {
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { ProductoAPI } from '@core/services/API/productoAPI';
+import { conRetryPorColdStart } from '@core/services/http-retry.util';
 import {
   Producto,
   ProductoCreate,
@@ -41,7 +42,9 @@ export const ProductosStore = signalStore(
       }
       patchState(store, { loading: true, error: null });
       try {
-        const items = await firstValueFrom(service.getAll());
+        const items = await firstValueFrom(
+          service.getAll().pipe(conRetryPorColdStart),
+        );
         patchState(store, { items, loaded: true, loading: false });
       } catch {
         patchState(store, {

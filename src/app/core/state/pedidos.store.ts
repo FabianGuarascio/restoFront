@@ -8,6 +8,7 @@ import {
 } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { PedidoAPI } from '@core/services/API/pedidoAPI';
+import { conRetryPorColdStart } from '@core/services/http-retry.util';
 import {
   Pedido,
   PedidoEstado,
@@ -79,7 +80,9 @@ export const PedidosStore = signalStore(
         }
         patchState(store, { loading: true, error: null });
         try {
-          const resumenes = await firstValueFrom(service.getAll());
+          const resumenes = await firstValueFrom(
+            service.getAll().pipe(conRetryPorColdStart),
+          );
           patchState(store, { resumenes, loaded: true, loading: false });
         } catch {
           patchState(store, {
