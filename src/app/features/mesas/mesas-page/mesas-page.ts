@@ -16,10 +16,12 @@ import { Mesa } from '@core/models/mesa.model';
 import { MesasStore } from '@core/state/mesas.store';
 import { MesaItem } from './mesa-item/mesa-item';
 import { ModalCrearMesa } from './modal-crear-mesa/modal-crear-mesa';
+import { ErrorBanner } from '@shared/components/error-banner/error-banner';
+import { LoadingSpinner } from '@shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-mesas-page',
-  imports: [MesaItem, ModalCrearMesa, DragDropModule],
+  imports: [MesaItem, ModalCrearMesa, DragDropModule, ErrorBanner, LoadingSpinner],
   templateUrl: './mesas-page.html',
 })
 export class MesasPage implements OnInit {
@@ -28,10 +30,16 @@ export class MesasPage implements OnInit {
   private readonly injector = inject(Injector);
 
   readonly mesas = this.mesasStore.items;
+  readonly errorCarga = this.mesasStore.error;
+  readonly cargando = this.mesasStore.loading;
   readonly modalCreacionAbierto = signal(false);
 
   ngOnInit(): void {
     this.mesasStore.load();
+  }
+
+  reintentarCarga(): void {
+    this.mesasStore.load(true);
   }
 
   onDrop(event: CdkDragDrop<Mesa[]>): void {

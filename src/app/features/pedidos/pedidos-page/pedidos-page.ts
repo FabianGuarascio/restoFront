@@ -11,10 +11,12 @@ import {
 } from '../../../core/models/pedido.model';
 import { PedidoDetalle } from './pedido-detalle/pedido-detalle';
 import { PedidosTabla } from './pedidos-tabla/pedidos-tabla';
+import { ErrorBanner } from '@shared/components/error-banner/error-banner';
+import { LoadingSpinner } from '@shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-pedidos-page',
-  imports: [FormsModule, PedidoDetalle, PedidosTabla],
+  imports: [FormsModule, PedidoDetalle, PedidosTabla, ErrorBanner, LoadingSpinner],
   templateUrl: './pedidos-page.html',
 })
 export class PedidosPage implements OnInit {
@@ -25,6 +27,12 @@ export class PedidosPage implements OnInit {
   readonly pedidoSeleccionado = this.pedidosStore.seleccionado;
   readonly mostrarNuevoPedido = signal(false);
   readonly error = signal<string | null>(null);
+  readonly errorCarga = computed(
+    () => this.pedidosStore.error() ?? this.mesasStore.error(),
+  );
+  readonly cargando = computed(
+    () => this.pedidosStore.loading() || this.mesasStore.loading(),
+  );
 
   readonly todosLosEstados = TODOS_LOS_ESTADOS;
   readonly estadosFiltrados = signal<Set<PedidoEstado>>(
@@ -82,6 +90,11 @@ export class PedidosPage implements OnInit {
   ngOnInit(): void {
     this.pedidosStore.load();
     this.mesasStore.load();
+  }
+
+  reintentarCarga(): void {
+    this.pedidosStore.load(true);
+    this.mesasStore.load(true);
   }
 
   async crearPedido(): Promise<void> {

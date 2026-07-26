@@ -10,19 +10,28 @@
     </button>
   </div>
 
-  <ul class="divide-y">
-    @for (categoria of categorias(); track categoria.id) {
-      <app-categoria-item
-        [categoria]="categoria"
-        (editar)="editar($event)"
-        (eliminar)="eliminar($event)"
-      />
-    } @empty {
-      <li class="py-3 text-slate-500 text-sm">
-        No hay categorías cargadas todavía.
-      </li>
-    }
-  </ul>
+  @if (cargando()) {
+    <app-loading-spinner />
+  } @else if (errorCarga()) {
+    <app-error-banner
+      [mensaje]="errorCarga()!"
+      (reintentar)="reintentarCarga()"
+    />
+  } @else {
+    <ul class="divide-y">
+      @for (categoria of categorias(); track categoria.id) {
+        <app-categoria-item
+          [categoria]="categoria"
+          (editar)="editar($event)"
+          (eliminar)="eliminar($event)"
+        />
+      } @empty {
+        <li class="py-3 text-slate-500 text-sm">
+          No hay categorías cargadas todavía.
+        </li>
+      }
+    </ul>
+  }
 </div>
 
 <app-modal-formulario
