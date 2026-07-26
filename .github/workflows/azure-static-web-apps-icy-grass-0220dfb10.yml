@@ -42,9 +42,12 @@ jobs:
           skip_app_build: true
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
+          # Con skip_app_build, app_location apunta directo a la carpeta ya
+          # buildeada (no se combina con output_location, que solo aplica
+          # cuando Oryx es quien construye la app).
+          app_location: "dist/restoFront/browser" # Carpeta ya buildeada
           api_location: "" # Api source code path - optional
-          output_location: "dist/restoFront/browser" # Built app content directory - optional
+          output_location: "" # No aplica con skip_app_build
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
