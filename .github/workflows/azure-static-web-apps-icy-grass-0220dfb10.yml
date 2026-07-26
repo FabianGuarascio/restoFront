@@ -19,6 +19,19 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      # El cache de SDKs de Oryx (el builder que usa la action de abajo) no
+      # tiene ninguna versión de Node que satisfaga el mínimo que exige
+      # @schematics/angular (^22.22.3 || ^24.15.0 || >=26.0.0) — su versión
+      # más nueva es 24.13.0. Por eso el build se hace acá, con Node real del
+      # runner, y se le pasa el resultado ya armado a la action (skip_app_build).
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -26,6 +39,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_GRASS_0220DFB10 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
+          skip_app_build: true
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
