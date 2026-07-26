@@ -5,6 +5,7 @@ export interface Mesa {
   numero: number;
   capacidad: number;
   estado: MesaEstado;
+  orden: number;
 }
 
 export interface MesaCreate {

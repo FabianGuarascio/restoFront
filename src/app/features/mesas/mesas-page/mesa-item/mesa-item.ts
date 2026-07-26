@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
+import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { Mesa } from '@core/models/mesa.model';
 import { MesasStore } from '@core/state/mesas.store';
 import { ModalEliminar } from '@shared/components/modal-eliminar/modal-eliminar';
@@ -6,7 +7,7 @@ import { ClaseEstadoMesaPipe } from './clase-estado-mesa.pipe';
 
 @Component({
   selector: 'app-mesa-item',
-  imports: [ModalEliminar, ClaseEstadoMesaPipe],
+  imports: [ModalEliminar, ClaseEstadoMesaPipe, CdkDragHandle],
   templateUrl: './mesa-item.html',
 })
 export class MesaItem {

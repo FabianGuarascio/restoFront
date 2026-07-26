@@ -23,4 +23,8 @@ export class MesaAPI {
   delete(id: number) {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  reordenar(ids: number[]) {
+    return this.http.put<void>(`${this.baseUrl}/orden`, { ids });
+  }
 }

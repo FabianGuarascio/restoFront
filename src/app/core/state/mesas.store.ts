@@ -69,6 +69,22 @@ export const MesasStore = signalStore(
       patchState(store, { items: store.items().filter((m) => m.id !== id) });
     },
 
+    async reordenar(ids: number[]): Promise<void> {
+      const anteriores = store.items();
+      const reordenadas = ids
+        .map((id) => anteriores.find((m) => m.id === id))
+        .filter((m): m is Mesa => m !== undefined);
+      patchState(store, { items: reordenadas });
+      try {
+        await firstValueFrom(service.reordenar(ids));
+      } catch {
+        patchState(store, {
+          items: anteriores,
+          error: 'No se pudo guardar el nuevo orden de las mesas.',
+        });
+      }
+    },
+
     // No es un CRUD real: PedidosStore usa esto para reflejar el efecto de dominio
     // "crear pedido ocupa la mesa" / "pagar pedido libera la mesa" a partir del
     // response del propio endpoint de Pedidos, sin volver a pegarle a la API de Mesas.
