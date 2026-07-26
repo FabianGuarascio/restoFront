@@ -2,3 +2,4 @@
 
 @import 'tailwindcss';
 @import './styles/cdk-drag-overrides.css';
+@import '@angular/material/prebuilt-themes/azure-blue.css';

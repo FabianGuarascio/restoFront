@@ -1,0 +1,76 @@
+<button
+  type="button"
+  (click)="colapsado.set(!colapsado())"
+  class="w-full flex items-center justify-between text-sm font-semibold text-slate-500 mb-2 cursor-pointer"
+>
+  <span>{{ titulo() }} ({{ pedidos().length }})</span>
+  <svg
+    class="w-4 h-4 transition-transform"
+    [class.-rotate-90]="colapsado()"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M4 6l4 4 4-4" />
+  </svg>
+</button>
+
+@if (error()) {
+  <p class="text-red-600 text-xs mb-2">{{ error() }}</p>
+}
+
+@if (!colapsado()) {
+  <ul
+    animate.enter="entra-tabla"
+    animate.leave="sale-tabla"
+    class="bg-white rounded-lg shadow divide-y"
+  >
+    @for (resumen of pedidos(); track resumen.id) {
+      <li>
+        <button
+          (click)="seleccionar(resumen)"
+          class="w-full text-left px-4 py-3 hover:bg-slate-50 cursor-pointer"
+          [class.bg-slate-100]="pedidoSeleccionado()?.id === resumen.id"
+          [class.animar-preparacion]="resumen.estado === 'EnPreparacion'"
+        >
+          <p class="font-medium flex items-center gap-2">
+            Mesa {{ resumen.mesaNumero }}
+            <span
+              class="text-xs font-medium px-2 py-0.5 rounded border"
+              [class]="resumen.estado | claseEstadoPedido"
+              [class.animar-listo]="resumen.estado === 'Listo'"
+            >
+              {{ resumen.estado }}
+            </span>
+          </p>
+          <p class="text-sm text-slate-500">${{ resumen.total }}</p>
+          <p class="text-xs text-slate-400 mt-1">
+            Creado:
+            <span
+              [matTooltip]="
+                resumen.fechaCreacion | date: 'dd/MM/yyyy HH:mm:ss'
+              "
+              matTooltipPosition="above"
+              >{{ resumen.fechaCreacion | tiempoRelativo }}</span
+            >
+            · Actualizado:
+            <span
+              [matTooltip]="
+                resumen.fechaActualizacion | date: 'dd/MM/yyyy HH:mm:ss'
+              "
+              matTooltipPosition="above"
+              >{{ resumen.fechaActualizacion | tiempoRelativo }}</span
+            >
+          </p>
+        </button>
+      </li>
+    } @empty {
+      <li class="px-4 py-3 text-sm text-slate-500">
+        {{ mensajeVacio() }}
+      </li>
+    }
+  </ul>
+}

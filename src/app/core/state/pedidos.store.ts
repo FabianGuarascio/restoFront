@@ -35,18 +35,41 @@ const initialState: PedidosState = {
 };
 
 function derivarResumen(pedido: Pedido): PedidoResumen {
-  const { id, mesaId, mesaNumero, estado, fechaCreacion, total } = pedido;
-  return { id, mesaId, mesaNumero, estado, fechaCreacion, total };
+  const {
+    id,
+    mesaId,
+    mesaNumero,
+    estado,
+    fechaCreacion,
+    fechaActualizacion,
+    total,
+  } = pedido;
+  return {
+    id,
+    mesaId,
+    mesaNumero,
+    estado,
+    fechaCreacion,
+    fechaActualizacion,
+    total,
+  };
 }
 
 export const PedidosStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ seleccionadoId, detalles }) => ({
+  withComputed(({ seleccionadoId, detalles, resumenes }) => ({
     seleccionado: computed(() => {
       const id = seleccionadoId();
       return id !== null ? (detalles()[id] ?? null) : null;
     }),
+    resumenesOrdenados: computed(() =>
+      [...resumenes()].sort(
+        (a, b) =>
+          new Date(b.fechaActualizacion).getTime() -
+          new Date(a.fechaActualizacion).getTime(),
+      ),
+    ),
   })),
   withMethods(
     (store, service = inject(PedidoAPI), mesasStore = inject(MesasStore)) => ({

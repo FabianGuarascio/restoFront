@@ -1,0 +1,123 @@
+<div class="bg-white rounded-lg shadow p-5">
+  @if (error()) {
+    <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
+  }
+
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-lg font-semibold">Mesa {{ pedido().mesaNumero }}</h2>
+      <p class="text-sm text-slate-500 flex items-center gap-2">
+        Estado:
+        <span
+          class="text-xs font-medium px-2 py-0.5 rounded border"
+          [class]="pedido().estado | claseEstadoPedido"
+          [class.animar-listo]="pedido().estado === 'Listo'"
+        >
+          {{ pedido().estado }}
+        </span>
+      </p>
+    </div>
+    <p class="text-2xl font-bold">${{ pedido().total }}</p>
+  </div>
+
+  <ul class="divide-y mb-4">
+    @for (item of pedido().items; track item.id) {
+      <li class="flex items-center justify-between py-2">
+        <div>
+          <p class="font-medium">
+            {{ item.cantidad }}x {{ item.productoNombre }}
+          </p>
+          @if (item.notas) {
+            <p class="text-sm text-slate-500">{{ item.notas }}</p>
+          }
+        </div>
+        <div class="flex items-center gap-3">
+          <p>${{ item.subtotal }}</p>
+          @if (puedeModificarItems()) {
+            <button
+              (click)="quitarItem(item.id)"
+              class="text-red-600 hover:underline text-sm"
+            >
+              Quitar
+            </button>
+          }
+        </div>
+      </li>
+    } @empty {
+      <li class="py-3 text-slate-500 text-sm">
+        Todavía no se agregaron productos.
+      </li>
+    }
+  </ul>
+
+  @if (puedeModificarItems()) {
+    <form
+      (ngSubmit)="agregarItem()"
+      class="flex flex-wrap gap-2 items-end mb-5 border-t pt-4"
+    >
+      <div class="flex-1 min-w-[160px]">
+        <label for="item-producto" class="block text-xs text-slate-500"
+          >Producto</label
+        >
+        <select
+          id="item-producto"
+          [(ngModel)]="itemForm.productoId"
+          name="productoId"
+          class="border rounded px-2 py-1.5 w-full"
+          required
+        >
+          <option [ngValue]="null" disabled>Elegir producto</option>
+          @for (producto of productosDisponibles(); track producto.id) {
+            <option [ngValue]="producto.id">
+              {{ producto.nombre }} · ${{ producto.precio }}
+            </option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="item-cantidad" class="block text-xs text-slate-500"
+          >Cantidad</label
+        >
+        <input
+          id="item-cantidad"
+          [(ngModel)]="itemForm.cantidad"
+          name="cantidad"
+          type="number"
+          min="1"
+          class="border rounded px-2 py-1.5 w-20"
+          required
+        />
+      </div>
+      <div class="flex-1 min-w-[140px]">
+        <label for="item-notas" class="block text-xs text-slate-500"
+          >Notas</label
+        >
+        <input
+          id="item-notas"
+          [(ngModel)]="itemForm.notas"
+          name="notas"
+          class="border rounded px-2 py-1.5 w-full"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+      >
+        Agregar
+      </button>
+    </form>
+  }
+
+  @if (transicionesDisponibles().length > 0) {
+    <div class="flex gap-2 border-t pt-4">
+      @for (estado of transicionesDisponibles(); track estado) {
+        <button
+          (click)="cambiarEstado(estado)"
+          class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50"
+        >
+          Pasar a {{ estado }}
+        </button>
+      }
+    </div>
+  }
+</div>

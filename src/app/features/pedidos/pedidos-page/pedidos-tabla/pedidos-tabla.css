@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+@keyframes respirar-preparacion {
+  from {
+    background-position: -100% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.animar-preparacion {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(100, 116, 139, 0.35) 50%,
+    transparent 100%
+  );
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  animation: respirar-preparacion 2.2s linear infinite;
+}
+
+/* Ciclo total de 6.6s = 1.6s de balanceo + 5s quieto, para que la espera se
+   repita entre cada vuelta (animation-delay solo demora la primera vez). */
+@keyframes balancear-listo {
+  0%,
+  34.24%,
+  100% {
+    transform: rotate(0deg) translateX(0);
+  }
+  6.06% {
+    transform: rotate(-15deg) translateX(-1px);
+  }
+  18.18% {
+    transform: rotate(15deg) translateX(1px);
+  }
+}
+
+.animar-listo {
+  display: inline-block;
+  animation: balancear-listo 3.6s ease-in-out infinite;
+}
+
+@keyframes aparecer-tabla {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes desaparecer-tabla {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.entra-tabla {
+  animation: aparecer-tabla 180ms ease-out;
+}
+
+.sale-tabla {
+  animation: desaparecer-tabla 180ms ease-in;
+}

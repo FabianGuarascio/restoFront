@@ -22,6 +22,7 @@ export interface Pedido {
   mesaNumero: number;
   estado: PedidoEstado;
   fechaCreacion: string;
+  fechaActualizacion: string;
   items: PedidoItem[];
   total: number;
 }
@@ -32,6 +33,7 @@ export interface PedidoResumen {
   mesaNumero: number;
   estado: PedidoEstado;
   fechaCreacion: string;
+  fechaActualizacion: string;
   total: number;
 }
 
@@ -50,3 +52,9 @@ export const PEDIDO_TRANSICIONES_VALIDAS: Record<PedidoEstado, PedidoEstado[]> =
     Pagado: [],
     Cancelado: [],
   };
+
+export const TODOS_LOS_ESTADOS = Object.keys(
+  PEDIDO_TRANSICIONES_VALIDAS,
+) as PedidoEstado[];
+
+export const ESTADOS_FINALIZADOS: PedidoEstado[] = ['Pagado', 'Cancelado'];
