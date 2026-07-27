@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-slate-100">
+<div class="min-h-screen bg-slate-100 dark:bg-slate-900">
   @if (authStore.estaLogueado()) {
     <nav class="bg-slate-900 text-white px-6 py-3 flex items-center gap-6">
       <span class="font-semibold text-lg">🍽️ RestoAdmin</span>
@@ -6,23 +6,34 @@
         routerLink="/pedidos"
         routerLinkActive="text-amber-400"
         class="hover:text-amber-300"
+        data-tour="nav-pedidos"
         >Pedidos</a
       >
       <a
         routerLink="/mesas"
         routerLinkActive="text-amber-400"
         class="hover:text-amber-300"
+        data-tour="nav-mesas"
         >Mesas</a
       >
       <a
         routerLink="/menu"
         routerLinkActive="text-amber-400"
         class="hover:text-amber-300"
+        data-tour="nav-menu"
         >Menú</a
       >
 
       <div class="ml-auto flex items-center gap-4">
         <span class="text-sm text-slate-300">{{ authStore.usuario()?.nombreUsuario }}</span>
+        <button
+          type="button"
+          (click)="themeStore.alternar()"
+          class="cursor-pointer hover:text-amber-300"
+          [attr.aria-label]="themeStore.tema() === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+        >
+          {{ themeStore.tema() === 'dark' ? '☀️' : '🌙' }}
+        </button>
         <button
           type="button"
           (click)="cerrarSesion()"

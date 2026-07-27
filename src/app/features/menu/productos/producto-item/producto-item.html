@@ -7,12 +7,12 @@
       {{ producto().nombre }}
       @if (!producto().disponible) {
         <span
-          class="text-xs text-red-600 border border-red-300 rounded px-1.5 py-0.5 ml-2"
+          class="text-xs text-red-600 border border-red-300 rounded px-1.5 py-0.5 ml-2 dark:text-red-400 dark:border-red-700"
           >No disponible</span
         >
       }
     </p>
-    <p class="text-sm text-slate-500">
+    <p class="text-sm text-slate-500 dark:text-slate-400">
       {{ producto().categoriaNombre }} · ${{ producto().precio }}
     </p>
   </div>

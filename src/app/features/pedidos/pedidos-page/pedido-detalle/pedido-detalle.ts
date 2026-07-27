@@ -41,6 +41,14 @@ export class PedidoDetalle {
     () => PEDIDO_TRANSICIONES_VALIDAS[this.pedido().estado],
   );
 
+  bloqueaTransicion(estado: PedidoEstado): boolean {
+    return (
+      estado === 'EnPreparacion' &&
+      this.pedido().estado === 'Pendiente' &&
+      this.pedido().items.length === 0
+    );
+  }
+
   constructor() {
     this.productosStore.load();
   }

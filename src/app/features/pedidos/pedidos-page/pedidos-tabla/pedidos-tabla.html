@@ -1,7 +1,7 @@
 <button
   type="button"
   (click)="colapsado.set(!colapsado())"
-  class="w-full flex items-center justify-between text-sm font-semibold text-slate-500 mb-2 cursor-pointer"
+  class="w-full flex items-center justify-between text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2 cursor-pointer"
 >
   <span>{{ titulo() }} ({{ pedidos().length }})</span>
   <svg
@@ -26,14 +26,15 @@
   <ul
     animate.enter="entra-tabla"
     animate.leave="sale-tabla"
-    class="bg-white rounded-lg shadow divide-y"
+    class="bg-white dark:bg-slate-800 rounded-lg shadow divide-y"
   >
     @for (resumen of pedidos(); track resumen.id) {
       <li>
         <button
           (click)="seleccionar(resumen)"
-          class="w-full text-left px-4 py-3 hover:bg-slate-50 cursor-pointer"
+          class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
           [class.bg-slate-100]="pedidoSeleccionado()?.id === resumen.id"
+          [class.dark:bg-slate-900]="pedidoSeleccionado()?.id === resumen.id"
           [class.animar-preparacion]="resumen.estado === 'EnPreparacion'"
         >
           <p class="font-medium flex items-center gap-2">
@@ -46,7 +47,7 @@
               {{ resumen.estado }}
             </span>
           </p>
-          <p class="text-sm text-slate-500">${{ resumen.total }}</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">${{ resumen.total }}</p>
           <p class="text-xs text-slate-400 mt-1">
             Creado:
             <span
@@ -68,7 +69,7 @@
         </button>
       </li>
     } @empty {
-      <li class="px-4 py-3 text-sm text-slate-500">
+      <li class="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
         {{ mensajeVacio() }}
       </li>
     }

@@ -12,12 +12,13 @@
     }
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-1">
+      <div class="lg:col-span-1 lg:col-start-1 lg:row-start-1">
         <div class="flex items-center justify-between mb-3">
           <h1 class="text-xl font-semibold">Pedidos</h1>
           <button
             (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())"
             class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+            data-tour="crear-pedido"
           >
             {{ mostrarNuevoPedido() ? 'Cancelar' : '+ Nuevo' }}
           </button>
@@ -26,10 +27,10 @@
         @if (mostrarNuevoPedido()) {
           <form
             (ngSubmit)="crearPedido()"
-            class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
+            class="bg-white dark:bg-slate-800 rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
           >
             <div class="flex-1">
-              <label for="pedido-mesa" class="block text-xs text-slate-500"
+              <label for="pedido-mesa" class="block text-xs text-slate-500 dark:text-slate-400"
                 >Mesa libre</label
               >
               <select
@@ -56,7 +57,7 @@
           </form>
         }
 
-        <div class="bg-white rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
           <label class="flex items-center gap-1.5 font-medium">
             <input
               type="checkbox"
@@ -77,30 +78,31 @@
             </label>
           }
         </div>
-
-        <app-pedidos-tabla
-          titulo="En proceso"
-          [pedidos]="pedidosActivos()"
-          mensajeVacio="No hay pedidos todavía."
-        />
-
-        <app-pedidos-tabla
-          titulo="Finalizados"
-          [pedidos]="pedidosFinalizados()"
-          mensajeVacio="No hay pedidos finalizados."
-          class="mt-5"
-        />
       </div>
 
-      <div class="lg:col-span-2">
+      <div class="lg:col-span-2 lg:col-start-2 lg:row-start-1 lg:row-span-3">
         @if (pedidoSeleccionado(); as pedido) {
           <app-pedido-detalle [pedido]="pedido" />
         } @else {
-          <div class="bg-white rounded-lg shadow p-10 text-center text-slate-500">
+          <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-10 text-center text-slate-500 dark:text-slate-400">
             Elegí un pedido de la lista o creá uno nuevo.
           </div>
         }
       </div>
+
+      <app-pedidos-tabla
+        titulo="En proceso"
+        [pedidos]="pedidosActivos()"
+        mensajeVacio="No hay pedidos todavía."
+        class="lg:col-start-1 lg:row-start-2"
+      />
+
+      <app-pedidos-tabla
+        titulo="Finalizados"
+        [pedidos]="pedidosFinalizados()"
+        mensajeVacio="No hay pedidos finalizados."
+        class="lg:col-start-1 lg:row-start-3"
+      />
     </div>
   }
 </div>

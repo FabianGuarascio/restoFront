@@ -7,7 +7,7 @@ Frontend del challenge técnico "Administración de Restaurante". Aplicación An
 - Angular 22, componentes standalone
 - Estado de entidades con `@ngrx/signals` (SignalStore) — un store por entidad en `src/app/core/state/`: `categorias.store.ts`, `productos.store.ts`, `mesas.store.ts`, `pedidos.store.ts`
 - Tailwind para estilos
-- Tests con **Vitest** (no Karma/Jasmine)
+- Tests unitarios con **Vitest** (no Karma/Jasmine) + e2e con **Playwright** — ver sección "Tests"
 
 ## Estructura
 
@@ -39,6 +39,44 @@ Login por cookie de sesión (no JWT) contra `RestoApi` — ver el README de ese 
 
 La URL base de la API se configura por environment (`src/environments/`), no está hardcodeada en los services.
 
+## Tests
+
+Dos capas, con herramientas distintas:
+
+### Unitarios — Vitest
+
+Runner integrado en Angular CLI 22 (`@angular/build:unit-test`), **no** Karma/Jasmine — no requiere configuración manual aparte, corre sobre jsdom. Sintaxis estilo Jest (`describe`/`it`/`expect`, globals ya disponibles).
+
+```bash
+npm test
+```
+
+22 tests en `src/app/**/*.spec.ts`, junto al archivo que prueban (`auth.store.ts` → `auth.store.spec.ts`, etc.). Patrón consistente en todos: **mockear solo el service HTTP** de más bajo nivel (`{ provide: AuthAPI, useValue: { login: () => of(...) } }`) y dejar correr la lógica real de stores/componentes encima — no se mockean los stores ni Angular Material (excepto `provideNoopAnimations()` cuando el componente renderiza algo que usa animaciones, ej. `matTooltip` vía `PedidosTabla`). Para componentes con signal inputs (`input.required<T>()`), se setean con `fixture.componentRef.setInput('prop', valor)` antes de `fixture.detectChanges()`.
+
+### End-to-end — Playwright
+
+Corre contra la app real en el navegador (Chromium), pegándole a un backend real — no hay mocks. Requiere:
+1. El backend corriendo en `https://localhost:7043` (`dotnet run --launch-profile https` desde `RestoApi/RestoApi.Api`) — Playwright **no** lo levanta solo.
+2. La contraseña de un usuario real (Juan o María) vía variable de entorno `E2E_PASSWORD` — **nunca hardcodeada** en el código, mismo criterio de seguridad que en el backend. El frontend (`npm start`) sí lo levanta solo si no está corriendo (`webServer` en `playwright.config.ts`).
+
+```bash
+# PowerShell
+$env:E2E_PASSWORD = "la-contraseña-de-juan"; npx playwright test
+
+# bash
+E2E_PASSWORD="la-contraseña-de-juan" npx playwright test
+```
+
+Tests en `e2e/*.spec.ts`; `e2e/helpers.ts` centraliza el login (`loguear(page)`) — lee `E2E_PASSWORD`/`E2E_USUARIO` (default `juan`), y de paso marca el tour de onboarding como ya visto en `localStorage` para que su overlay no tape los elementos que cada test necesita clickear.
+
+Modos útiles para debuggear con el navegador a la vista (por defecto corre headless):
+```bash
+npx playwright test --headed   # abre la ventana real del navegador
+npx playwright test --ui       # panel interactivo con timeline y capturas
+npx playwright test --debug    # pausado paso a paso con el Inspector
+npx playwright test crear-mesa.spec.ts --headed   # un solo archivo
+```
+
 ## Deploy
 
 - Frontend: https://icy-grass-0220dfb10.7.azurestaticapps.net (Azure Static Web App `resto-front-guarascio`)
@@ -50,7 +88,7 @@ CI/CD vía GitHub Actions: push a `main` dispara build y deploy automático a la
 
 ```bash
 npm start   # ng serve, http://localhost:4200
-npm test    # vitest
+npm test    # vitest — ver sección "Tests" para e2e
 ```
 
 ## Building

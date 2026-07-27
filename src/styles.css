@@ -1,5 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  @apply bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+}
+
 @import './styles/cdk-drag-overrides.css';
 @import '@angular/material/prebuilt-themes/azure-blue.css';
+@import 'driver.js/dist/driver.css';
+
+.dark .driver-popover {
+  background-color: var(--color-slate-800);
+  color: var(--color-slate-100);
+}
+.dark .driver-popover-title {
+  color: var(--color-slate-100);
+}
+.dark .driver-popover-description {
+  color: var(--color-slate-300);
+}
+.dark .driver-popover-close-btn {
+  color: var(--color-slate-400);
+}
+.dark .driver-popover-close-btn:hover,
+.dark .driver-popover-close-btn:focus {
+  color: var(--color-slate-100);
+}
+.dark .driver-popover-progress-text {
+  color: var(--color-slate-400);
+}
+.dark .driver-popover-footer-btn {
+  background-color: var(--color-slate-700);
+  color: var(--color-slate-100);
+  border-color: var(--color-slate-600);
+}
+.dark .driver-popover-footer-btn:hover,
+.dark .driver-popover-footer-btn:focus {
+  background-color: var(--color-slate-600);
+}
+.dark .driver-popover-arrow-side-left {
+  border-left-color: var(--color-slate-800);
+}
+.dark .driver-popover-arrow-side-right {
+  border-right-color: var(--color-slate-800);
+}
+.dark .driver-popover-arrow-side-top {
+  border-top-color: var(--color-slate-800);
+}
+.dark .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--color-slate-800);
+}

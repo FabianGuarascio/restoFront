@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { loguear } from './helpers';
 
 test('navega entre Pedidos, Mesas y Menú', async ({ page }) => {
-  await page.goto('/');
+  await loguear(page);
   await expect(page).toHaveURL(/\/pedidos$/);
   await expect(page.getByRole('heading', { name: 'Pedidos' })).toBeVisible();
 

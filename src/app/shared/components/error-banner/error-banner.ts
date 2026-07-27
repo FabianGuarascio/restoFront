@@ -5,7 +5,7 @@ import { Component, input, output } from '@angular/core';
   imports: [],
   template: `
     <div
-      class="flex items-center justify-between gap-3 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm"
+      class="flex items-center justify-between gap-3 bg-red-50 border border-red-200 text-red-700 dark:bg-red-950/40 dark:border-red-800 dark:text-red-300 rounded-lg px-4 py-3 mb-4 text-sm"
     >
       <span>{{ mensaje() }}</span>
       <button
