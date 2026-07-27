@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow p-5">
+<div class="bg-white dark:bg-slate-800 rounded-lg shadow p-5">
   @if (error()) {
     <p class="text-red-600 text-sm mb-3">{{ error() }}</p>
   }
@@ -6,7 +6,7 @@
   <div class="flex items-center justify-between mb-4">
     <div>
       <h2 class="text-lg font-semibold">Mesa {{ pedido().mesaNumero }}</h2>
-      <p class="text-sm text-slate-500 flex items-center gap-2">
+      <p class="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
         Estado:
         <span
           class="text-xs font-medium px-2 py-0.5 rounded border"
@@ -28,7 +28,7 @@
             {{ item.cantidad }}x {{ item.productoNombre }}
           </p>
           @if (item.notas) {
-            <p class="text-sm text-slate-500">{{ item.notas }}</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">{{ item.notas }}</p>
           }
         </div>
         <div class="flex items-center gap-3">
@@ -44,7 +44,7 @@
         </div>
       </li>
     } @empty {
-      <li class="py-3 text-slate-500 text-sm">
+      <li class="py-3 text-slate-500 dark:text-slate-400 text-sm">
         Todavía no se agregaron productos.
       </li>
     }
@@ -56,7 +56,7 @@
       class="flex flex-wrap gap-2 items-end mb-5 border-t pt-4"
     >
       <div class="flex-1 min-w-[160px]">
-        <label for="item-producto" class="block text-xs text-slate-500"
+        <label for="item-producto" class="block text-xs text-slate-500 dark:text-slate-400"
           >Producto</label
         >
         <select
@@ -75,7 +75,7 @@
         </select>
       </div>
       <div>
-        <label for="item-cantidad" class="block text-xs text-slate-500"
+        <label for="item-cantidad" class="block text-xs text-slate-500 dark:text-slate-400"
           >Cantidad</label
         >
         <input
@@ -89,7 +89,7 @@
         />
       </div>
       <div class="flex-1 min-w-[140px]">
-        <label for="item-notas" class="block text-xs text-slate-500"
+        <label for="item-notas" class="block text-xs text-slate-500 dark:text-slate-400"
           >Notas</label
         >
         <input
@@ -113,7 +113,7 @@
       @for (estado of transicionesDisponibles(); track estado) {
         <button
           (click)="cambiarEstado(estado)"
-          class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50"
+          class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700"
         >
           Pasar a {{ estado }}
         </button>

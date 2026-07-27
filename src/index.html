@@ -8,6 +8,13 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
   <body>
+    <script>
+      (function () {
+        var t = localStorage.getItem('resto-tema');
+        var oscuro = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (oscuro) document.documentElement.classList.add('dark');
+      })();
+    </script>
     <app-root></app-root>
   </body>
 </html>

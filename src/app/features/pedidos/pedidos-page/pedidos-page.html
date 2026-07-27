@@ -26,10 +26,10 @@
         @if (mostrarNuevoPedido()) {
           <form
             (ngSubmit)="crearPedido()"
-            class="bg-white rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
+            class="bg-white dark:bg-slate-800 rounded-lg shadow p-3 mb-4 flex gap-2 items-end"
           >
             <div class="flex-1">
-              <label for="pedido-mesa" class="block text-xs text-slate-500"
+              <label for="pedido-mesa" class="block text-xs text-slate-500 dark:text-slate-400"
                 >Mesa libre</label
               >
               <select
@@ -56,7 +56,7 @@
           </form>
         }
 
-        <div class="bg-white rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-3 mb-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
           <label class="flex items-center gap-1.5 font-medium">
             <input
               type="checkbox"
@@ -96,7 +96,7 @@
         @if (pedidoSeleccionado(); as pedido) {
           <app-pedido-detalle [pedido]="pedido" />
         } @else {
-          <div class="bg-white rounded-lg shadow p-10 text-center text-slate-500">
+          <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-10 text-center text-slate-500 dark:text-slate-400">
             Elegí un pedido de la lista o creá uno nuevo.
           </div>
         }
