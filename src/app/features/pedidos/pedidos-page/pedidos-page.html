@@ -12,12 +12,13 @@
     }
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-1">
+      <div class="lg:col-span-1 lg:col-start-1 lg:row-start-1">
         <div class="flex items-center justify-between mb-3">
           <h1 class="text-xl font-semibold">Pedidos</h1>
           <button
             (click)="mostrarNuevoPedido.set(!mostrarNuevoPedido())"
             class="bg-slate-900 text-white rounded px-3 py-1.5 text-sm hover:bg-slate-700"
+            data-tour="crear-pedido"
           >
             {{ mostrarNuevoPedido() ? 'Cancelar' : '+ Nuevo' }}
           </button>
@@ -77,22 +78,9 @@
             </label>
           }
         </div>
-
-        <app-pedidos-tabla
-          titulo="En proceso"
-          [pedidos]="pedidosActivos()"
-          mensajeVacio="No hay pedidos todavía."
-        />
-
-        <app-pedidos-tabla
-          titulo="Finalizados"
-          [pedidos]="pedidosFinalizados()"
-          mensajeVacio="No hay pedidos finalizados."
-          class="mt-5"
-        />
       </div>
 
-      <div class="lg:col-span-2">
+      <div class="lg:col-span-2 lg:col-start-2 lg:row-start-1 lg:row-span-3">
         @if (pedidoSeleccionado(); as pedido) {
           <app-pedido-detalle [pedido]="pedido" />
         } @else {
@@ -101,6 +89,20 @@
           </div>
         }
       </div>
+
+      <app-pedidos-tabla
+        titulo="En proceso"
+        [pedidos]="pedidosActivos()"
+        mensajeVacio="No hay pedidos todavía."
+        class="lg:col-start-1 lg:row-start-2"
+      />
+
+      <app-pedidos-tabla
+        titulo="Finalizados"
+        [pedidos]="pedidosFinalizados()"
+        mensajeVacio="No hay pedidos finalizados."
+        class="lg:col-start-1 lg:row-start-3"
+      />
     </div>
   }
 </div>

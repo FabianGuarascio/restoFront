@@ -109,11 +109,17 @@
   }
 
   @if (transicionesDisponibles().length > 0) {
-    <div class="flex gap-2 border-t pt-4">
+    <div class="flex flex-wrap gap-2 border-t pt-4">
       @for (estado of transicionesDisponibles(); track estado) {
         <button
           (click)="cambiarEstado(estado)"
-          class="border rounded px-3 py-1.5 text-sm hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700"
+          [disabled]="bloqueaTransicion(estado)"
+          [title]="
+            bloqueaTransicion(estado)
+              ? 'Agregá al menos un ítem antes de pasar a EnPreparacion.'
+              : ''
+          "
+          class="border rounded px-3 py-1.5 text-sm whitespace-nowrap hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
         >
           Pasar a {{ estado }}
         </button>
