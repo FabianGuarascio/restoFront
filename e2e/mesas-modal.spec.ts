@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { loguear } from './helpers';
 
 test('abre y cancela el modal de nueva mesa', async ({ page }) => {
+  await loguear(page);
   await page.goto('/mesas');
 
   await page.getByRole('button', { name: '+ Nueva mesa' }).click();
